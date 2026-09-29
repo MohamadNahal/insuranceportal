@@ -1,0 +1,28 @@
+{
+  "SecurityInformation": [
+    {
+      "Id": "f5860b78-fa0a-43f3-aab0-c6e023d5141c",
+      "PolicyholderId": "11111111-1111-1111-1111-111111111111",
+      "NicknameHash": "$2a$11$vcrB5xfZ2OtaRA0Ss8NBX.uL1zB0iuk.0/DzmMvcZzRvvHTDBcSfq",
+      "ChildhoodHeroHash": "$2a$11$0IzXQDc2v8gGBED1yQxlfeCblkp.z5/bqD.N2VTgnaPjVoNyOUmO2"
+    },
+    {
+      "Id": "bae3c10a-69eb-426f-9102-a3b262e03b44",
+      "PolicyholderId": "33333333-3333-3333-3333-333333333333",
+      "NicknameHash": "$2a$11$jwZejlWJSzpHVv6cdMLxKO7M6qxTM1hLhZRjM5oABCVG3mcq2NK.u",
+      "ChildhoodHeroHash": "$2a$11$trQgU89QDzE6WRi3tkp2HuVJZoGMq2FLTzP5BoVN0i1gaNc56imoa"
+    },
+    {
+      "Id": "55a51dc2-4230-4f56-a13f-fabcb444b369",
+      "PolicyholderId": "44444444-4444-4444-4444-444444444444",
+      "NicknameHash": "$2a$11$DqDxZs9Vq1FtDVRQ9YHoMOx9fD7e0udC.IegOZCqpNnN87sFye9uy",
+      "ChildhoodHeroHash": "$2a$11$rNcb7V0UUmEFcxAtgDyjgOq0KMVJJisrUQfBm/pYBe4Fhw4BoY7KO"
+    },
+    {
+      "Id": "95d83d0a-92b4-4cca-adbd-f37d8bf7d66b",
+      "PolicyholderId": "11111111-1111-1111-1111-111111111111",
+      "NicknameHash": "$2a$11$Inx70QyVdD4edIYkfEPkxOmn/bU64pBxflQYWosG2r2S58OwkbHle",
+      "ChildhoodHeroHash": "$2a$11$kRvPmK0iwMMczrpakhOSmeRxSaidCMRBw0g4T22SuMQjmYW6t4U7K"
+    }
+  ]
+}

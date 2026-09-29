@@ -1,0 +1,52 @@
+{
+  "Contacts": [
+    {
+      "Id": "4bb0e981-8e7a-4e3c-9bc0-de43eb3f9161",
+      "PolicyholderId": "11111111-1111-1111-1111-111111111111",
+      "Email": "chandler@example.com",
+      "Phone": "9004008000",
+      "StreetAddress": "123 Main Street",
+      "StreetAddressLine2": "",
+      "City": "Anchorage",
+      "State": "AK",
+      "ZipCode": "99501",
+      "Country": "USA"
+    },
+    {
+      "Id": "6890c29e-6b6f-46ec-b65b-7b29b2c98819",
+      "PolicyholderId": "33333333-3333-3333-3333-333333333333",
+      "Email": "Nahal@example.com",
+      "Phone": "8888888888",
+      "StreetAddress": "123 Main Street",
+      "StreetAddressLine2": "",
+      "City": "Anchorage",
+      "State": "AK",
+      "ZipCode": "99501",
+      "Country": "USA"
+    },
+    {
+      "Id": "1d5be348-c63e-4f75-8612-4daa12d4d420",
+      "PolicyholderId": "44444444-4444-4444-4444-444444444444",
+      "Email": "dev@example.com",
+      "Phone": "8848805618",
+      "StreetAddress": "safakerala",
+      "StreetAddressLine2": "india",
+      "City": "trivandrum",
+      "State": "kerala",
+      "ZipCode": "99501",
+      "Country": "india"
+    },
+    {
+      "Id": "a4970911-e3b2-48b5-a33c-c979c850fbe0",
+      "PolicyholderId": "11111111-1111-1111-1111-111111111111",
+      "Email": "chandler@example.com",
+      "Phone": "9004008000",
+      "StreetAddress": "123 Main Street",
+      "StreetAddressLine2": "",
+      "City": "Anchorage",
+      "State": "AK",
+      "ZipCode": "99501",
+      "Country": "USA"
+    }
+  ]
+}

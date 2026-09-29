@@ -1,0 +1,6 @@
+@InsurancePortalRegistration_HostAddress = http://localhost:5100
+
+GET {{InsurancePortalRegistration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
