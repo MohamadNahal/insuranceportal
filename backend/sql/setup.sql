@@ -192,7 +192,6 @@ INNER JOIN Contacts c
     ON a.PolicyholderId = c.PolicyholderId
 WHERE a.Username = 'monica123';
 GO
-SELECT * FROM InsurancePortal
 
 SELECT * FROM Policyholders;
 GO
@@ -349,12 +348,91 @@ INSERT INTO Policyholders
 VALUES
 (
     '55555555-5555-5555-5555-555555555555',
-    '3333',
-    'VA7788985',
-    'Mohamad',
-    'Nahal',
-    '12/20/2024',
+    '5555',
+    'VA7788925',
+    'Vishnu',
+    'Nair',
+    '12/10/2024',
     '99501',
-    'Nahal@example.com',
+    'vishnu@example.com',
     '8888888888'
 );
+
+USE InsurancePortal;
+GO
+
+INSERT INTO Policyholders
+(
+    Id,
+    SSN,
+    PolicyNumber,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    ZipCode,
+    Email,
+    Phone
+)
+VALUES
+(
+    '66666666-6666-6666-6666-666666666666',
+    '6666',
+    'VA6677886',
+    'Alen',
+    'Thomas',
+    '12/20/2024',
+    '99501',
+    'alen@example.com',
+    '6666666666'
+),
+(
+    '77777777-7777-7777-7777-777777777777',
+    '7777',
+    'VA7788997',
+    'Alex',
+    'Mathew',
+    '10/15/2024',
+    '99501',
+    'alex@example.com',
+    '7777777777'
+);
+GO
+USE InsurancePortal;
+GO
+
+INSERT INTO Policyholders
+(
+    Id,
+    SSN,
+    PolicyNumber,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    ZipCode,
+    Email,
+    Phone
+)
+VALUES
+(
+    '90909090-9090-9090-9090-909090909090',
+    '9090',
+    'VA9090909',
+    'Kenny',
+    'George',
+    '08/25/2024',
+    '99502',
+    'kenny@example.com',
+    '9090909090'
+),
+(
+    '99999999-9999-9999-9999-999999999999',
+    '9999',
+    'VA9999999',
+    'Shahal',
+    'Abdullah',
+    '11/10/2024',
+    '99503',
+    'shahal@example.com',
+    '9999999999'
+);
+GO

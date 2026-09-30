@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 * {
   box-sizing: border-box;
 }
@@ -6,31 +8,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f8;
-  color: #222222;
 }
 
 body {
   min-height: 100vh;
-}
-
-label {
-  display: block;
-  color: #222222;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-input {
-  color: #222222;
-  background: white;
-}
-
-input::placeholder {
-  color: #888888;
-}
-
-button {
-  font-family: inherit;
+  font-family: Arial, Helvetica, sans-serif;
 }
