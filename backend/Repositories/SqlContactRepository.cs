@@ -9,16 +9,13 @@ public class SqlContactRepository : IContactRepository
     private readonly InsurancePortalDbContext context;
     private readonly ILogger<SqlContactRepository> logger;
 
-    public SqlContactRepository(
-        InsurancePortalDbContext context,
-        ILogger<SqlContactRepository> logger)
+    public SqlContactRepository(InsurancePortalDbContext context,ILogger<SqlContactRepository> logger)
     {
         this.context = context;
         this.logger = logger;
     }
 
-    public async Task AddContactAsync(
-        ContactInformation contact)
+    public async Task AddContactAsync(ContactInformation contact)
     {
         try
         {

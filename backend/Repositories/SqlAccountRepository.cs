@@ -10,9 +10,7 @@ public class SqlAccountRepository : IAccountRepository
     private readonly InsurancePortalDbContext context;
     private readonly ILogger<SqlAccountRepository> logger;
 
-    public SqlAccountRepository(
-        InsurancePortalDbContext context,
-        ILogger<SqlAccountRepository> logger)
+    public SqlAccountRepository(InsurancePortalDbContext context,ILogger<SqlAccountRepository> logger)
     {
         this.context = context;
         this.logger = logger;
@@ -36,8 +34,7 @@ public class SqlAccountRepository : IAccountRepository
         }
     }
 
-    public async Task<bool> PolicyholderHasAccountAsync(
-        Guid policyholderId)
+    public async Task<bool> PolicyholderHasAccountAsync(Guid policyholderId)
     {
         try
         {
@@ -72,8 +69,7 @@ public class SqlAccountRepository : IAccountRepository
         }
     }
 
-    public async Task<Account?> FindByUsernameAsync(
-        string username)
+    public async Task<Account?> FindByUsernameAsync(string username)
     {
         try
         {

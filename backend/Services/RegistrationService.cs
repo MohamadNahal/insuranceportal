@@ -27,8 +27,7 @@ public class RegistrationService : IRegistrationService
         this.logger = logger;
     }
 
-    public async Task<string?> ValidatePolicyholderAsync(
-        PolicyholderValidationRequest request)
+    public async Task<string?> ValidatePolicyholderAsync(PolicyholderValidationRequest request)
     {
         try
         {
@@ -58,8 +57,7 @@ public class RegistrationService : IRegistrationService
         }
     }
 
-    public async Task<string?> RegisterAsync(
-        RegisterRequest request)
+    public async Task<string?> RegisterAsync(RegisterRequest request)
     {
         try
         {
@@ -149,8 +147,7 @@ public class RegistrationService : IRegistrationService
         }
     }
 
-    public async Task<Account?> LoginAsync(
-        LoginRequest request)
+    public async Task<Account?> LoginAsync(LoginRequest request)
     {
         try
         {

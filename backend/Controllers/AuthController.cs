@@ -10,15 +10,13 @@ public class AuthController : ControllerBase
 {
     private readonly IRegistrationService registrationService;
 
-    public AuthController(
-        IRegistrationService registrationService)
+    public AuthController(IRegistrationService registrationService)
     {
         this.registrationService = registrationService;
     }
 
     [HttpPost("validate-policyholder")]
-    public async Task<IActionResult> ValidatePolicyholder(
-        PolicyholderValidationRequest request)
+    public async Task<IActionResult> ValidatePolicyholder(PolicyholderValidationRequest request)
     {
         try
         {
@@ -37,8 +35,7 @@ public class AuthController : ControllerBase
 
             return Ok(new
             {
-                message =
-                    "Policyholder validated successfully."
+                message ="Policyholder validated successfully."
             });
         }
         catch (Exception ex)
@@ -51,20 +48,17 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(
-        RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
         try
         {
-            var result =
-                await registrationService.RegisterAsync(request);
+            var result = await registrationService.RegisterAsync(request);
 
             if (result == null)
             {
                 return BadRequest(new
                 {
-                    message =
-                        "Policyholder information could not be validated."
+                    message = "Policyholder information could not be validated."
                 });
             }
 
@@ -72,8 +66,7 @@ public class AuthController : ControllerBase
             {
                 return BadRequest(new
                 {
-                    message =
-                        "User already exists. Please continue with login."
+                    message ="User already exists. Please continue with login."
                 });
             }
 
@@ -87,8 +80,7 @@ public class AuthController : ControllerBase
 
             return Ok(new
             {
-                message =
-                    "Customer registered successfully."
+                message ="Customer registered successfully."
             });
         }
         catch (Exception ex)
@@ -101,20 +93,17 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(
-        LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
         try
         {
-            var account =
-                await registrationService.LoginAsync(request);
+            var account =await registrationService.LoginAsync(request);
 
             if (account == null)
             {
                 return Unauthorized(new
                 {
-                    message =
-                        "Invalid username or password."
+                    message ="Invalid username or password."
                 });
             }
 

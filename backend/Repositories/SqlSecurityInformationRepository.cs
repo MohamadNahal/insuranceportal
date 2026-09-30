@@ -10,16 +10,13 @@ public class SqlSecurityInformationRepository
     private readonly InsurancePortalDbContext context;
     private readonly ILogger<SqlSecurityInformationRepository> logger;
 
-    public SqlSecurityInformationRepository(
-        InsurancePortalDbContext context,
-        ILogger<SqlSecurityInformationRepository> logger)
+    public SqlSecurityInformationRepository(InsurancePortalDbContext context,ILogger<SqlSecurityInformationRepository> logger)
     {
         this.context = context;
         this.logger = logger;
     }
 
-    public async Task AddSecurityInformationAsync(
-        SecurityInformation securityInformation)
+    public async Task AddSecurityInformationAsync(SecurityInformation securityInformation)
     {
         try
         {

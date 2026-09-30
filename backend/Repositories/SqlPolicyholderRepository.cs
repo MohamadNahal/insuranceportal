@@ -10,9 +10,7 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
     private readonly InsurancePortalDbContext context;
     private readonly ILogger<SqlPolicyholderRepository> logger;
 
-    public SqlPolicyholderRepository(
-        InsurancePortalDbContext context,
-        ILogger<SqlPolicyholderRepository> logger)
+    public SqlPolicyholderRepository(InsurancePortalDbContext context,ILogger<SqlPolicyholderRepository> logger)
     {
         this.context = context;
         this.logger = logger;
@@ -47,8 +45,7 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
         }
     }
 
-    public async Task<Policyholder?> FindPolicyholderByIdAsync(
-        Guid id)
+    public async Task<Policyholder?> FindPolicyholderByIdAsync(Guid id)
     {
         try
         {
