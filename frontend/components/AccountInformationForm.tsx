@@ -1,7 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegistration } from "@/context/RegistrationContext";
+
+type FormErrors = {
+  username: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default function AccountInformationForm() {
   const router = useRouter();
@@ -11,13 +18,59 @@ export default function AccountInformationForm() {
     setAccountInformation,
   } = useRegistration();
 
+  const [errors, setErrors] = useState<FormErrors>({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const { name, value } = event.target;
+
     setAccountInformation({
       ...accountInformation,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {
+      username: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (!accountInformation.username.trim()) {
+      newErrors.username = "Please enter a username";
+    }
+
+    if (!accountInformation.password) {
+      newErrors.password = "Please enter a password";
+    }
+
+    if (!accountInformation.confirmPassword) {
+      newErrors.confirmPassword =
+        "Please confirm your password";
+    } else if (
+      accountInformation.password !==
+      accountInformation.confirmPassword
+    ) {
+      newErrors.confirmPassword =
+        "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every(
+      (error) => error === ""
+    );
   };
 
   const handleContinue = (
@@ -25,13 +78,18 @@ export default function AccountInformationForm() {
   ) => {
     event.preventDefault();
 
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
+
     router.push("/register/security");
   };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
       <div className="w-full max-w-2xl rounded-xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
           Insurance Portal
         </h1>
@@ -75,9 +133,18 @@ export default function AccountInformationForm() {
               name="username"
               value={accountInformation.username}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.username
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.username && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.username} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -94,9 +161,18 @@ export default function AccountInformationForm() {
               type="password"
               value={accountInformation.password}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.password
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.password && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.password} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -113,9 +189,18 @@ export default function AccountInformationForm() {
               type="password"
               value={accountInformation.confirmPassword}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.confirmPassword
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.confirmPassword} ❗
+              </p>
+            )}
           </div>
 
           <button

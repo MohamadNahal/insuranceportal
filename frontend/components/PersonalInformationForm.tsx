@@ -4,6 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegistration } from "@/context/RegistrationContext";
 
+type FormErrors = {
+  ssn: string;
+  policyNumber: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  zipCode: string;
+};
+
 export default function PersonalInformationForm() {
   const router = useRouter();
 
@@ -15,19 +24,136 @@ export default function PersonalInformationForm() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState<FormErrors>({
+    ssn: "",
+    policyNumber: "",
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    zipCode: "",
+  });
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const { name, value } = event.target;
+
+    if (name === "firstName" || name === "lastName") {
+      if (!/^[A-Za-z\s]*$/.test(value)) {
+        return;
+      }
+    }
+
     setPersonalInformation({
       ...personalInformation,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+
+    setMessage("");
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {
+      ssn: "",
+      policyNumber: "",
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      zipCode: "",
+    };
+
+    if (!personalInformation.ssn) {
+      newErrors.ssn =
+        "Please enter last 4 digits of SSN";
+    } else if (!/^\d{4}$/.test(personalInformation.ssn)) {
+      newErrors.ssn =
+        "Please enter last 4 digits of SSN";
+    }
+
+    if (!personalInformation.policyNumber) {
+      newErrors.policyNumber =
+        "Please enter a valid Policy Number";
+    } else if (
+      !/^[A-Za-z]{2}\d{7}$/.test(
+        personalInformation.policyNumber
+      )
+    ) {
+      newErrors.policyNumber =
+        "Please enter a valid Policy Number";
+    }
+
+    if (!personalInformation.firstName.trim()) {
+      newErrors.firstName =
+        "Please enter valid First Name";
+    }
+
+    if (!personalInformation.lastName.trim()) {
+      newErrors.lastName =
+        "Please enter valid Last Name";
+    }
+
+    if (!personalInformation.dateOfBirth) {
+      newErrors.dateOfBirth =
+        "Please enter valid Date of Birth";
+    } else if (
+      !/^\d{2}\/\d{2}\/\d{4}$/.test(
+        personalInformation.dateOfBirth
+      )
+    ) {
+      newErrors.dateOfBirth =
+        "Please enter valid Date of Birth";
+    } else {
+      const [month, day, year] =
+        personalInformation.dateOfBirth
+          .split("/")
+          .map(Number);
+
+      const date = new Date(year, month - 1, day);
+      const today = new Date();
+
+      const isValidDate =
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day;
+
+      if (!isValidDate || date > today) {
+        newErrors.dateOfBirth =
+          "Please enter valid Date of Birth";
+      }
+    }
+
+    if (!personalInformation.zipCode) {
+      newErrors.zipCode =
+        "Please enter valid 5 digit Zip Code";
+    } else if (
+      !/^\d{5}$/.test(personalInformation.zipCode)
+    ) {
+      newErrors.zipCode =
+        "Please enter valid 5 digit Zip Code";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every(
+      (error) => error === ""
+    );
   };
 
   const validatePolicyholder = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
 
     setLoading(true);
     setMessage("");
@@ -65,7 +191,6 @@ export default function PersonalInformationForm() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
       <div className="w-full max-w-2xl rounded-xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
           Insurance Portal
         </h1>
@@ -110,9 +235,18 @@ export default function PersonalInformationForm() {
               value={personalInformation.ssn}
               onChange={handleChange}
               maxLength={4}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.ssn
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.ssn && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.ssn} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -128,9 +262,22 @@ export default function PersonalInformationForm() {
               name="policyNumber"
               value={personalInformation.policyNumber}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.policyNumber
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.policyNumber && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.policyNumber} ❗
+              </p>
+            )}
+
+            <p className="mt-2 text-sm text-blue-700">
+              ℹ Your policy number can be found on your original policy document.
+            </p>
           </div>
 
           <div>
@@ -146,9 +293,18 @@ export default function PersonalInformationForm() {
               name="firstName"
               value={personalInformation.firstName}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.firstName
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.firstName && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.firstName} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -164,9 +320,18 @@ export default function PersonalInformationForm() {
               name="lastName"
               value={personalInformation.lastName}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.lastName
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.lastName && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.lastName} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -183,9 +348,19 @@ export default function PersonalInformationForm() {
               value={personalInformation.dateOfBirth}
               onChange={handleChange}
               placeholder="MM/DD/YYYY"
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              maxLength={10}
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.dateOfBirth
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.dateOfBirth && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.dateOfBirth} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -202,9 +377,18 @@ export default function PersonalInformationForm() {
               value={personalInformation.zipCode}
               onChange={handleChange}
               maxLength={5}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.zipCode
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.zipCode && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.zipCode} ❗
+              </p>
+            )}
           </div>
 
           <button

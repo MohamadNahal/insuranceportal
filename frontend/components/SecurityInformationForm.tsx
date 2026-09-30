@@ -1,7 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegistration } from "@/context/RegistrationContext";
+
+type FormErrors = {
+  nickname: string;
+  childhoodHero: string;
+};
 
 export default function SecurityInformationForm() {
   const router = useRouter();
@@ -11,13 +17,54 @@ export default function SecurityInformationForm() {
     setSecurityInformation,
   } = useRegistration();
 
+  const [errors, setErrors] = useState<FormErrors>({
+    nickname: "",
+    childhoodHero: "",
+  });
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const { name, value } = event.target;
+
+    if (name === "nickname" || name === "childhoodHero") {
+      if (!/^[A-Za-z\s]*$/.test(value)) {
+        return;
+      }
+    }
+
     setSecurityInformation({
       ...securityInformation,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {
+      nickname: "",
+      childhoodHero: "",
+    };
+
+    if (!securityInformation.nickname.trim()) {
+      newErrors.nickname =
+        "Please enter a valid nickname";
+    }
+
+    if (!securityInformation.childhoodHero.trim()) {
+      newErrors.childhoodHero =
+        "Please enter a valid childhood hero";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every(
+      (error) => error === ""
+    );
   };
 
   const handleContinue = (
@@ -25,13 +72,18 @@ export default function SecurityInformationForm() {
   ) => {
     event.preventDefault();
 
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
+
     router.push("/register/contact");
   };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
       <div className="w-full max-w-2xl rounded-xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
           Insurance Portal
         </h1>
@@ -75,9 +127,18 @@ export default function SecurityInformationForm() {
               name="nickname"
               value={securityInformation.nickname}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.nickname
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.nickname && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.nickname} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -93,9 +154,18 @@ export default function SecurityInformationForm() {
               name="childhoodHero"
               value={securityInformation.childhoodHero}
               onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.childhoodHero
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.childhoodHero && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.childhoodHero} ❗
+              </p>
+            )}
           </div>
 
           <button

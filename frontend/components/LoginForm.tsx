@@ -5,19 +5,82 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/authService";
 
+type FormErrors = {
+  username: string;
+  password: string;
+};
+
 export default function LoginForm() {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errors, setErrors] = useState<FormErrors>({
+    username: "",
+    password: "",
+  });
+
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleUsernameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setUsername(event.target.value);
+
+    setErrors({
+      ...errors,
+      username: "",
+    });
+
+    setMessage("");
+  };
+
+  const handlePasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPassword(event.target.value);
+
+    setErrors({
+      ...errors,
+      password: "",
+    });
+
+    setMessage("");
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {
+      username: "",
+      password: "",
+    };
+
+    if (!username.trim()) {
+      newErrors.username = "Please enter your username";
+    }
+
+    if (!password) {
+      newErrors.password = "Please enter your password";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every(
+      (error) => error === ""
+    );
+  };
 
   const handleLogin = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
 
     setLoading(true);
     setMessage("");
@@ -48,7 +111,6 @@ export default function LoginForm() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
       <div className="w-full max-w-2xl rounded-xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
           Insurance Portal
         </h1>
@@ -73,12 +135,19 @@ export default function LoginForm() {
               id="username"
               name="username"
               value={username}
-              onChange={(event) =>
-                setUsername(event.target.value)
-              }
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              onChange={handleUsernameChange}
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.username
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.username && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.username} ❗
+              </p>
+            )}
           </div>
 
           <div>
@@ -94,12 +163,19 @@ export default function LoginForm() {
               name="password"
               type="password"
               value={password}
-              onChange={(event) =>
-                setPassword(event.target.value)
-              }
-              required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              onChange={handlePasswordChange}
+              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
+                errors.password
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+              }`}
             />
+
+            {errors.password && (
+              <p className="mt-1 text-sm font-medium text-red-500">
+                {errors.password} ❗
+              </p>
+            )}
           </div>
 
           <button
