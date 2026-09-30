@@ -17,3 +17,8 @@ frontend/out/
 
 appsettings.Development.json
 .DS_Store
+
+TestResults/
+coverage-report/
+bin/
+obj/
