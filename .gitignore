@@ -16,3 +16,4 @@ frontend/out/
 .env.production.local
 
 appsettings.Development.json
+.DS_Store
