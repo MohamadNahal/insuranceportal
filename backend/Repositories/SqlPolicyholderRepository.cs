@@ -1,6 +1,6 @@
 using InsurancePortalRegistration.Data;
 using InsurancePortalRegistration.Exceptions;
-using InsurancePortalRegistration.Models;
+using InsurancePortalRegistration.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace InsurancePortalRegistration.Repositories;

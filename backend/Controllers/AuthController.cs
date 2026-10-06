@@ -1,6 +1,7 @@
 using InsurancePortalRegistration.DTOs;
 using InsurancePortalRegistration.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace InsurancePortalRegistration.Controllers;
 
@@ -9,117 +10,99 @@ namespace InsurancePortalRegistration.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IRegistrationService registrationService;
+    private readonly IAuthService authService;
 
-    public AuthController(IRegistrationService registrationService)
-    {
-        this.registrationService = registrationService;
-    }
+    public AuthController(
+    IRegistrationService registrationService,
+    IAuthService authService)
+{
+    this.registrationService = registrationService;
+    this.authService = authService;
+}
 
     [HttpPost("validate-policyholder")]
-    public async Task<IActionResult> ValidatePolicyholder(PolicyholderValidationRequest request)
+public async Task<IActionResult> ValidatePolicyholder(
+    PolicyholderValidationRequest request)
+{
+    var result =
+        await registrationService.ValidatePolicyholderAsync(request);
+
+    switch (result)
     {
-        try
-        {
-            var result =
-                await registrationService
-                    .ValidatePolicyholderAsync(request);
-
-            if (result == null)
-            {
-                return BadRequest(new
-                {
-                    message =
-                        "Policyholder information could not be validated."
-                });
-            }
-
+        case PolicyholderValidationResult.Validated:
             return Ok(new
             {
-                message ="Policyholder validated successfully."
+                message = "Policyholder validated successfully."
             });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
+
+        case PolicyholderValidationResult.NotFound:
+            return UnprocessableEntity(new
             {
-                message = ex.Message
+                message = "Policyholder information could not be validated."
             });
-        }
+
+        default:
+            return StatusCode(StatusCodes.Status500InternalServerError);
     }
+}
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequest request)
+public async Task<IActionResult> Register(RegisterRequest request)
+{
+    var result =
+        await registrationService.RegisterAsync(request);
+
+    switch (result)
     {
-        try
-        {
-            var result = await registrationService.RegisterAsync(request);
-
-            if (result == null)
+        case RegistrationResult.PolicyholderNotFound:
+            return UnprocessableEntity(new
             {
-                return BadRequest(new
-                {
-                    message = "Policyholder information could not be validated."
-                });
-            }
-
-            if (result == "POLICYHOLDER_ALREADY_REGISTERED")
-            {
-                return BadRequest(new
-                {
-                    message ="User already exists. Please continue with login."
-                });
-            }
-
-            if (result == "USERNAME_EXISTS")
-            {
-                return BadRequest(new
-                {
-                    message = "Username already exists."
-                });
-            }
-
-            return Ok(new
-            {
-                message ="Customer registered successfully."
+                message = "Policyholder information could not be validated."
             });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
+
+        case RegistrationResult.PolicyholderAlreadyRegistered:
+            return Conflict(new
             {
-                message = ex.Message
+                message = "User already exists. Please continue with login."
             });
-        }
+
+        case RegistrationResult.UsernameExists:
+            return Conflict(new
+            {
+                message = "Username already exists."
+            });
+
+        case RegistrationResult.Registered:
+            return StatusCode(StatusCodes.Status201Created, new
+            {
+                message = "Customer registered successfully."
+            });
+
+        default:
+            return StatusCode(StatusCodes.Status500InternalServerError);
     }
+}
 
     [HttpPost("login")]
+    [EnableRateLimiting("Login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        try
+        var account =
+            await authService.LoginAsync(request);
+
+        if (account == null)
         {
-            var account =await registrationService.LoginAsync(request);
-
-            if (account == null)
+            return Unauthorized(new
             {
-                return Unauthorized(new
-                {
-                    message ="Invalid username or password."
-                });
-            }
-
-            return Ok(new
-            {
-                message = "Login successful.",
-                username = account.Username,
-                policyholderId = account.PolicyholderId
+                message = "Invalid username or password."
             });
         }
-        catch (Exception ex)
+
+        return Ok(new
         {
-            return StatusCode(500, new
-            {
-                message = ex.Message
-            });
-        }
+            message = "Login successful.",
+            username = account.Username,
+            policyholderId = account.PolicyholderId
+        });
     }
 }

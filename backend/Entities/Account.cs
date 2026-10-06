@@ -1,4 +1,6 @@
-namespace InsurancePortalRegistration.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace InsurancePortalRegistration.Entities;
 
 public class Account
 {
@@ -6,7 +8,9 @@ public class Account
 
     public Guid PolicyholderId { get; set; }
 
+    [MaxLength(100)]
     public string Username { get; set; } = "";
 
+    [MaxLength(255)]
     public string PasswordHash { get; set; } = "";
 }

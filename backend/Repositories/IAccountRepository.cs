@@ -1,4 +1,4 @@
-using InsurancePortalRegistration.Models;
+using InsurancePortalRegistration.Entities;
 
 namespace InsurancePortalRegistration.Repositories;
 

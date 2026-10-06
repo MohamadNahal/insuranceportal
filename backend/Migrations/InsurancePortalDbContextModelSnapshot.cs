@@ -30,16 +30,24 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid>("PolicyholderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PolicyholderId")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Accounts");
                 });
@@ -52,42 +60,55 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<Guid>("PolicyholderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("StreetAddressLine2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.HasIndex("PolicyholderId");
+
+                    b.ToTable("Contacts", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Contacts_ZipCode", "ZipCode NOT LIKE '%[^0-9]%'");
+                        });
                 });
 
             modelBuilder.Entity("InsurancePortalRegistration.Models.Policyholder", b =>
@@ -98,39 +119,52 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.Property<string>("DateOfBirth")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("PolicyNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("SSN")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Policyholders");
+                    b.ToTable("Policyholders", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Policyholders_SSN", "SSN NOT LIKE '%[^0-9]%'");
+
+                            t.HasCheckConstraint("CK_Policyholders_ZipCode", "ZipCode NOT LIKE '%[^0-9]%'");
+                        });
                 });
 
             modelBuilder.Entity("InsurancePortalRegistration.Models.SecurityInformation", b =>
@@ -141,18 +175,49 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.Property<string>("ChildhoodHeroHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("NicknameHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid>("PolicyholderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PolicyholderId");
+
                     b.ToTable("SecurityInformation");
+                });
+
+            modelBuilder.Entity("InsurancePortalRegistration.Models.Account", b =>
+                {
+                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                        .WithMany()
+                        .HasForeignKey("PolicyholderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InsurancePortalRegistration.Models.ContactInformation", b =>
+                {
+                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                        .WithMany()
+                        .HasForeignKey("PolicyholderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InsurancePortalRegistration.Models.SecurityInformation", b =>
+                {
+                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                        .WithMany()
+                        .HasForeignKey("PolicyholderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

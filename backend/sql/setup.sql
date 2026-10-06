@@ -436,3 +436,463 @@ VALUES
     '9999999999'
 );
 GO
+
+USE InsurancePortal;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '11111111-1111-1111-1111-111111111111'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '11111111-1111-1111-1111-111111111111',
+        '6666',
+        'VA6666667',
+        'Chandler',
+        'Bing',
+        '11/20/1988',
+        '99501',
+        'chandler@example.com',
+        '9004008000'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '22222222-2222-2222-2222-222222222222'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '22222222-2222-2222-2222-222222222222',
+        '7777',
+        'VA7777777',
+        'Monica',
+        'Geller',
+        '06/18/1990',
+        '99501',
+        'monica@example.com',
+        '9005009000'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '33333333-3333-3333-3333-333333333333'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '33333333-3333-3333-3333-333333333333',
+        '3333',
+        'VA7788985',
+        'Mohamad',
+        'Nahal',
+        '11/14/1990',
+        '99501',
+        'Nahal@example.com',
+        '8888888888'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '44444444-4444-4444-4444-444444444444'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '44444444-4444-4444-4444-444444444444',
+        '4444',
+        'VA8899006',
+        'Dev',
+        'Krishna',
+        '02/17/1987',
+        '99501',
+        'dev@example.com',
+        '7777777777'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '55555555-5555-5555-5555-555555555555'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '55555555-5555-5555-5555-555555555555',
+        '5555',
+        'VA7788925',
+        'Vishnu',
+        'Nair',
+        '01/19/1993',
+        '99501',
+        'vishnu@example.com',
+        '8888888888'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '66666666-6666-6666-6666-666666666666'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '66666666-6666-6666-6666-666666666666',
+        '6666',
+        'VA6677886',
+        'Alen',
+        'Thomas',
+        '04/12/1988',
+        '99501',
+        'alen@example.com',
+        '6666666666'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '77777777-7777-7777-7777-777777777777'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '77777777-7777-7777-7777-777777777777',
+        '7777',
+        'VA7788997',
+        'Alex',
+        'Mathew',
+        '09/25/1992',
+        '99501',
+        'alex@example.com',
+        '7777777777'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '88888888-8888-8888-8888-888888888888'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '88888888-8888-8888-8888-888888888888',
+        '8888',
+        'VA8899008',
+        'Gokul',
+        'Raj',
+        '11/25/1991',
+        '99501',
+        'gokul@example.com',
+        '8888888888'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '90909090-9090-9090-9090-909090909090'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '90909090-9090-9090-9090-909090909090',
+        '9090',
+        'VA9090909',
+        'Kenny',
+        'George',
+        '03/21/1985',
+        '99502',
+        'kenny@example.com',
+        '9090909090'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '99999999-9999-9999-9999-999999999999'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '99999999-9999-9999-9999-999999999999',
+        '9999',
+        'VA9999999',
+        'Shahal',
+        'Abdullah',
+        '06/30/1989',
+        '99503',
+        'shahal@example.com',
+        '9999999999'
+    );
+END;
+GO
+
+SELECT
+    Id,
+    SSN,
+    PolicyNumber,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    ZipCode,
+    Email,
+    Phone
+FROM Policyholders
+ORDER BY FirstName;
+GO
+
+USE InsurancePortal;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '88888888-8888-8888-8888-888888888888'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '88888888-8888-8888-8888-888888888888',
+        '8888',
+        'VA8899008',
+        'Gokul',
+        'Raj',
+        '11/25/1991',
+        '99501',
+        'gokul@example.com',
+        '8888888888'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '90909090-9090-9090-9090-909090909090'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '90909090-9090-9090-9090-909090909090',
+        '9090',
+        'VA9090909',
+        'Kenny',
+        'George',
+        '03/21/1985',
+        '99502',
+        'kenny@example.com',
+        '9090909090'
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM Policyholders
+    WHERE Id = '99999999-9999-9999-9999-999999999999'
+)
+BEGIN
+    INSERT INTO Policyholders
+    (
+        Id,
+        SSN,
+        PolicyNumber,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        ZipCode,
+        Email,
+        Phone
+    )
+    VALUES
+    (
+        '99999999-9999-9999-9999-999999999999',
+        '9999',
+        'VA9999999',
+        'Shahal',
+        'Abdullah',
+        '06/30/1989',
+        '99503',
+        'shahal@example.com',
+        '9999999999'
+    );
+END;
+GO
+
+SELECT
+    Id,
+    SSN,
+    PolicyNumber,
+    FirstName,
+    LastName,
+    DateOfBirth
+FROM Policyholders
+ORDER BY FirstName;
+GO

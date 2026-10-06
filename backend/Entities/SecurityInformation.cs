@@ -1,4 +1,6 @@
-namespace InsurancePortalRegistration.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace InsurancePortalRegistration.Entities;
 
 public class SecurityInformation
 {
@@ -6,7 +8,9 @@ public class SecurityInformation
 
     public Guid PolicyholderId { get; set; }
 
+    [MaxLength(255)]
     public string NicknameHash { get; set; } = "";
 
+    [MaxLength(255)]
     public string ChildhoodHeroHash { get; set; } = "";
 }

@@ -1,6 +1,5 @@
 using InsurancePortalRegistration.DTOs;
-using InsurancePortalRegistration.Exceptions;
-using InsurancePortalRegistration.Models;
+using InsurancePortalRegistration.Entities;
 using InsurancePortalRegistration.Repositories;
 
 namespace InsurancePortalRegistration.Services;
@@ -9,176 +8,112 @@ public class RegistrationService : IRegistrationService
 {
     private readonly IPolicyholderRepository policyholderRepository;
     private readonly IAccountRepository accountRepository;
-    private readonly IContactRepository contactRepository;
-    private readonly ISecurityInformationRepository securityInformationRepository;
-    private readonly ILogger<RegistrationService> logger;
+    private readonly IRegistrationRepository registrationRepository;
 
     public RegistrationService(
         IPolicyholderRepository policyholderRepository,
         IAccountRepository accountRepository,
-        IContactRepository contactRepository,
-        ISecurityInformationRepository securityInformationRepository,
-        ILogger<RegistrationService> logger)
+        IRegistrationRepository registrationRepository)
     {
         this.policyholderRepository = policyholderRepository;
         this.accountRepository = accountRepository;
-        this.contactRepository = contactRepository;
-        this.securityInformationRepository = securityInformationRepository;
-        this.logger = logger;
+        this.registrationRepository = registrationRepository;
     }
 
-    public async Task<string?> ValidatePolicyholderAsync(PolicyholderValidationRequest request)
+    public async Task<PolicyholderValidationResult> ValidatePolicyholderAsync(
+        PolicyholderValidationRequest request)
     {
-        try
-        {
-            var policyholder =
-                await policyholderRepository.FindPolicyholderAsync(
-                    request.SSN,
-                    request.PolicyNumber,
-                    request.FirstName,
-                    request.LastName,
-                    request.DateOfBirth,
-                    request.ZipCode);
+        var policyholder =
+            await policyholderRepository.FindPolicyholderAsync(
+                request.SSN,
+                request.PolicyNumber,
+                request.FirstName,
+                request.LastName,
+                request.DateOfBirth,
+                request.ZipCode);
 
-            if (policyholder == null)
-            {
-                return null;
-            }
+        if (policyholder == null)
+{
+    return PolicyholderValidationResult.NotFound;
+}
 
-            return "VALIDATED";
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "Could not validate policyholder.");
-
-            throw;
-        }
+return PolicyholderValidationResult.Validated;
     }
 
-    public async Task<string?> RegisterAsync(RegisterRequest request)
+    public async Task<RegistrationResult> RegisterAsync(RegisterRequest request)
     {
-        try
+        var policyholder =
+            await policyholderRepository.FindPolicyholderAsync(
+                request.PersonalInformation.SSN,
+                request.PersonalInformation.PolicyNumber,
+                request.PersonalInformation.FirstName,
+                request.PersonalInformation.LastName,
+                request.PersonalInformation.DateOfBirth,
+                request.PersonalInformation.ZipCode);
+
+        if (policyholder == null)
         {
-            var policyholder =
-                await policyholderRepository.FindPolicyholderAsync(
-                    request.PersonalInformation.SSN,
-                    request.PersonalInformation.PolicyNumber,
-                    request.PersonalInformation.FirstName,
-                    request.PersonalInformation.LastName,
-                    request.PersonalInformation.DateOfBirth,
-                    request.PersonalInformation.ZipCode);
-
-            if (policyholder == null)
-            {
-                return null;
-            }
-
-            var policyholderHasAccount =
-                await accountRepository.PolicyholderHasAccountAsync(
-                    policyholder.Id);
-
-            if (policyholderHasAccount)
-            {
-                return "POLICYHOLDER_ALREADY_REGISTERED";
-            }
-
-            var usernameExists =
-                await accountRepository.UsernameExistsAsync(
-                    request.AccountInformation.Username);
-
-            if (usernameExists)
-            {
-                return "USERNAME_EXISTS";
-            }
-
-            var account = new Account
-            {
-                Id = Guid.NewGuid(),
-                PolicyholderId = policyholder.Id,
-                Username = request.AccountInformation.Username,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(
-                    request.AccountInformation.Password)
-            };
-
-            await accountRepository.AddAccountAsync(account);
-
-            var contact = new ContactInformation
-            {
-                Id = Guid.NewGuid(),
-                PolicyholderId = policyholder.Id,
-                Email = request.ContactInformation.Email,
-                Phone = request.ContactInformation.Phone,
-                StreetAddress = request.ContactInformation.StreetAddress,
-                StreetAddressLine2 =
-                    request.ContactInformation.StreetAddressLine2,
-                City = request.ContactInformation.City,
-                State = request.ContactInformation.State,
-                ZipCode = request.ContactInformation.ZipCode,
-                Country = request.ContactInformation.Country
-            };
-
-            await contactRepository.AddContactAsync(contact);
-
-            var securityInformation = new SecurityInformation
-            {
-                Id = Guid.NewGuid(),
-                PolicyholderId = policyholder.Id,
-                NicknameHash = BCrypt.Net.BCrypt.HashPassword(
-                    request.SecurityInformation.Nickname),
-                ChildhoodHeroHash = BCrypt.Net.BCrypt.HashPassword(
-                    request.SecurityInformation.ChildhoodHero)
-            };
-
-            await securityInformationRepository
-                .AddSecurityInformationAsync(
-                    securityInformation);
-
-            return "REGISTERED";
+            return RegistrationResult.PolicyholderNotFound;
         }
-        catch (Exception ex)
+
+        var policyholderHasAccount =
+            await accountRepository.PolicyholderHasAccountAsync(
+                policyholder.Id);
+
+        if (policyholderHasAccount)
         {
-            logger.LogError(
-                ex,
-                "Could not register policyholder.");
-
-            throw;
+            return RegistrationResult.PolicyholderAlreadyRegistered;
         }
+
+        var usernameExists =
+            await accountRepository.UsernameExistsAsync(
+                request.AccountInformation.Username);
+
+        if (usernameExists)
+        {
+            return RegistrationResult.UsernameExists;
+        }
+
+        var account = new Account
+        {
+            Id = Guid.NewGuid(),
+            PolicyholderId = policyholder.Id,
+            Username = request.AccountInformation.Username,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(
+                request.AccountInformation.Password)
+        };
+
+        var contact = new ContactInformation
+        {
+            Id = Guid.NewGuid(),
+            PolicyholderId = policyholder.Id,
+            Email = request.ContactInformation.Email,
+            Phone = request.ContactInformation.Phone,
+            StreetAddress = request.ContactInformation.StreetAddress,
+            StreetAddressLine2 =
+                request.ContactInformation.StreetAddressLine2,
+            City = request.ContactInformation.City,
+            State = request.ContactInformation.State,
+            ZipCode = request.ContactInformation.ZipCode,
+            Country = request.ContactInformation.Country
+        };
+
+        var securityInformation = new SecurityInformation
+        {
+            Id = Guid.NewGuid(),
+            PolicyholderId = policyholder.Id,
+            NicknameHash = BCrypt.Net.BCrypt.HashPassword(
+                request.SecurityInformation.Nickname),
+            ChildhoodHeroHash = BCrypt.Net.BCrypt.HashPassword(
+                request.SecurityInformation.ChildhoodHero)
+        };
+
+        await registrationRepository.AddRegistrationAsync(
+            account,
+            contact,
+            securityInformation);
+
+        return RegistrationResult.Registered;
     }
 
-    public async Task<Account?> LoginAsync(LoginRequest request)
-    {
-        try
-        {
-            var account =
-                await accountRepository.FindByUsernameAsync(
-                    request.Username);
-
-            if (account == null)
-            {
-                return null;
-            }
-
-            var passwordValid =
-                BCrypt.Net.BCrypt.Verify(
-                    request.Password,
-                    account.PasswordHash);
-
-            if (!passwordValid)
-            {
-                return null;
-            }
-
-            return account;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "Could not process login.");
-
-            throw;
-        }
-    }
 }
