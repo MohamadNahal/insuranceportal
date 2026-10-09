@@ -58,7 +58,6 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
             logger.LogError(
                 ex,
                 "Could not find policyholder by ID.");
-
             throw new CouldNotFindPolicyholderException();
         }
     }

@@ -23,8 +23,7 @@ public class RegistrationService : IRegistrationService
     public async Task<PolicyholderValidationResult> ValidatePolicyholderAsync(
         PolicyholderValidationRequest request)
     {
-        var policyholder =
-            await policyholderRepository.FindPolicyholderAsync(
+        var policyholder = await policyholderRepository.FindPolicyholderAsync(
                 request.SSN,
                 request.PolicyNumber,
                 request.FirstName,
@@ -42,8 +41,7 @@ return PolicyholderValidationResult.Validated;
 
     public async Task<RegistrationResult> RegisterAsync(RegisterRequest request)
     {
-        var policyholder =
-            await policyholderRepository.FindPolicyholderAsync(
+        var policyholder = await policyholderRepository.FindPolicyholderAsync(
                 request.PersonalInformation.SSN,
                 request.PersonalInformation.PolicyNumber,
                 request.PersonalInformation.FirstName,
@@ -56,18 +54,13 @@ return PolicyholderValidationResult.Validated;
             return RegistrationResult.PolicyholderNotFound;
         }
 
-        var policyholderHasAccount =
-            await accountRepository.PolicyholderHasAccountAsync(
-                policyholder.Id);
-
+        var policyholderHasAccount = await accountRepository.PolicyholderHasAccountAsync(policyholder.Id);
         if (policyholderHasAccount)
         {
             return RegistrationResult.PolicyholderAlreadyRegistered;
         }
 
-        var usernameExists =
-            await accountRepository.UsernameExistsAsync(
-                request.AccountInformation.Username);
+        var usernameExists = await accountRepository.UsernameExistsAsync(request.AccountInformation.Username);
 
         if (usernameExists)
         {

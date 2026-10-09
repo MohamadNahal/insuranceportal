@@ -20,12 +20,10 @@ public class AuthController : ControllerBase
     this.authService = authService;
 }
 
-    [HttpPost("validate-policyholder")]
-public async Task<IActionResult> ValidatePolicyholder(
-    PolicyholderValidationRequest request)
+[HttpPost("validate-policyholder")]
+public async Task<IActionResult> ValidatePolicyholder(PolicyholderValidationRequest request)
 {
-    var result =
-        await registrationService.ValidatePolicyholderAsync(request);
+    var result = await registrationService.ValidatePolicyholderAsync(request);
 
     switch (result)
     {
@@ -46,11 +44,10 @@ public async Task<IActionResult> ValidatePolicyholder(
     }
 }
 
-    [HttpPost("register")]
+[HttpPost("register")]
 public async Task<IActionResult> Register(RegisterRequest request)
 {
-    var result =
-        await registrationService.RegisterAsync(request);
+    var result = await registrationService.RegisterAsync(request);
 
     switch (result)
     {
@@ -83,12 +80,11 @@ public async Task<IActionResult> Register(RegisterRequest request)
     }
 }
 
-    [HttpPost("login")]
-    [EnableRateLimiting("Login")]
+[HttpPost("login")]
+[EnableRateLimiting("Login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var account =
-            await authService.LoginAsync(request);
+        var account = await authService.LoginAsync(request);
 
         if (account == null)
         {

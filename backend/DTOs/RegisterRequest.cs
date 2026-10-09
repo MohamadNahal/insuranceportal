@@ -27,15 +27,13 @@ public class AccountInformationRequest : IValidatableObject
 
     [Required]
     [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,16}$",
-        ErrorMessage =
-            "Password must be 8 to 16 characters and contain at least one uppercase letter, one number, and a special character.")]
+        ErrorMessage ="Password must be 8 to 16 characters and contain at least one uppercase letter, one number, and a special character.")]
     public string Password { get; set; } = "";
 
     [Required]
     public string ConfirmPassword { get; set; } = "";
 
-    public IEnumerable<ValidationResult> Validate(
-        ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Password != ConfirmPassword)
         {

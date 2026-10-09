@@ -8,8 +8,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> logger;
 
-    public GlobalExceptionHandler(
-        ILogger<GlobalExceptionHandler> logger)
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
     {
         this.logger = logger;
     }

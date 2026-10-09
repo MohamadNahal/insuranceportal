@@ -47,7 +47,6 @@ public class SqlRegistrationRepository : IRegistrationRepository
             logger.LogError(
                 ex,
                 "Could not complete registration.");
-
             throw;
         }
     }

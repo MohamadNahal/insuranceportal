@@ -40,6 +40,7 @@ export default function AccountInformationForm() {
     });
   };
 
+  
   const validateForm = () => {
     const newErrors: FormErrors = {
       username: "",
@@ -49,10 +50,29 @@ export default function AccountInformationForm() {
 
     if (!accountInformation.username.trim()) {
       newErrors.username = "Please enter a username";
+    } else if (
+      accountInformation.username.length < 6 ||
+      accountInformation.username.length > 18
+    ) {
+      newErrors.username =
+        "Username must be between 6 and 18 characters";
     }
 
     if (!accountInformation.password) {
       newErrors.password = "Please enter a password";
+    } else if (accountInformation.password.length < 8 ||
+      accountInformation.password.length > 16) {
+      newErrors.password =
+        "Password must be between 8 and 16 characters";
+    } else if (!/[A-Z]/.test(accountInformation.password)) {
+      newErrors.password =
+        "Password must contain an uppercase letter";
+    } else if (!/[0-9]/.test(accountInformation.password)) {
+      newErrors.password =
+        "Password must contain a number";
+    } else if (!/[^A-Za-z0-9]/.test(accountInformation.password)) {
+      newErrors.password =
+        "Password must contain a special character";
     }
 
     if (!accountInformation.confirmPassword) {
@@ -72,6 +92,7 @@ export default function AccountInformationForm() {
       (error) => error === ""
     );
   };
+
 
   const handleContinue = (
     event: React.FormEvent<HTMLFormElement>

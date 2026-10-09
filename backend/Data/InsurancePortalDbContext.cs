@@ -6,8 +6,7 @@ namespace InsurancePortalRegistration.Data;
 public class InsurancePortalDbContext : DbContext
 {
     public InsurancePortalDbContext(
-        DbContextOptions<InsurancePortalDbContext> options)
-        : base(options)
+        DbContextOptions<InsurancePortalDbContext> options): base(options)
     {
     }
 

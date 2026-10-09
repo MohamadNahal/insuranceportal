@@ -15,20 +15,14 @@ public class AuthService : IAuthService
 
     public async Task<Account?> LoginAsync(LoginRequest request)
     {
-        var account =
-            await accountRepository.FindByUsernameAsync(
-                request.Username);
+        var account = await accountRepository.FindByUsernameAsync(request.Username);
 
         if (account == null)
         {
             return null;
         }
 
-        var passwordValid =
-            BCrypt.Net.BCrypt.Verify(
-                request.Password,
-                account.PasswordHash);
-
+        var passwordValid = BCrypt.Net.BCrypt.Verify(request.Password,account.PasswordHash);
         if (!passwordValid)
         {
             return null;

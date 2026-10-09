@@ -20,9 +20,7 @@ public class SqlSecurityInformationRepository
     {
         try
         {
-            await context.SecurityInformation.AddAsync(
-                securityInformation);
-
+            await context.SecurityInformation.AddAsync(securityInformation);
             await context.SaveChangesAsync();
         }
         catch (Exception ex)
@@ -30,7 +28,6 @@ public class SqlSecurityInformationRepository
             logger.LogError(
                 ex,
                 "Could not add security information.");
-
             throw new CouldNotAddSecurityInformationException();
         }
     }
