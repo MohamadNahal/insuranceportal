@@ -1,3 +1,7 @@
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5200/api";
+
 type RegisterRequest = {
   personalInformation: {
     ssn: string;
@@ -7,18 +11,15 @@ type RegisterRequest = {
     dateOfBirth: string;
     zipCode: string;
   };
-
   accountInformation: {
     username: string;
     password: string;
     confirmPassword: string;
   };
-
   securityInformation: {
     nickname: string;
     childhoodHero: string;
   };
-
   contactInformation: {
     email: string;
     phone: string;
@@ -31,11 +32,37 @@ type RegisterRequest = {
   };
 };
 
-export async function registerUser(
-  request: RegisterRequest
+type PolicyholderValidationRequest = {
+  ssn: string;
+  policyNumber: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  zipCode: string;
+};
+
+type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+async function readResponse(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return {
+      message: response.ok
+        ? "Request completed."
+        : "The request could not be completed. Please try again.",
+    };
+  }
+}
+
+export async function validatePolicyholder(
+  request: PolicyholderValidationRequest
 ) {
   const response = await fetch(
-    "http://localhost:5200/api/Auth/register",
+    `${API_BASE_URL}/Auth/validate-policyholder`,
     {
       method: "POST",
       headers: {
@@ -45,7 +72,7 @@ export async function registerUser(
     }
   );
 
-  const data = await response.json();
+  const data = await readResponse(response);
 
   return {
     response,
@@ -53,26 +80,33 @@ export async function registerUser(
   };
 }
 
-type LoginRequest = {
-  username: string;
-  password: string;
-};
+export async function registerUser(request: RegisterRequest) {
+  const response = await fetch(`${API_BASE_URL}/Auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
 
-export async function loginUser(
-  request: LoginRequest
-) {
-  const response = await fetch(
-    "http://localhost:5200/api/Auth/login",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    }
-  );
+  const data = await readResponse(response);
 
-  const data = await response.json();
+  return {
+    response,
+    data,
+  };
+}
+
+export async function loginUser(request: LoginRequest) {
+  const response = await fetch(`${API_BASE_URL}/Auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  const data = await readResponse(response);
 
   return {
     response,

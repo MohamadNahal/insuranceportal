@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/authService";
+import { setLoggedIn } from "@/services/authSession";
 
 type FormErrors = {
   username: string;
@@ -92,7 +93,8 @@ export default function LoginForm() {
       });
 
       if (response.ok) {
-        router.push("/welcome");
+      setLoggedIn();
+      router.push("/welcome");
       } else {
         setMessage(
           data.message ||

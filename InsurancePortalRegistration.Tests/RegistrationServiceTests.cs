@@ -161,13 +161,9 @@ public class RegistrationServiceTests
             }
         };
 
-        var result =
-            await service.RegisterAsync(request);
+        var result = await service.RegisterAsync(request);
 
-        Assert.That(
-    result,
-    Is.EqualTo(RegistrationResult.Registered));
-
+        Assert.That(result,Is.EqualTo(RegistrationResult.Registered));
         registrationRepository.Verify(
             repository =>
                 repository.AddRegistrationAsync(
@@ -177,17 +173,18 @@ public class RegistrationServiceTests
             Times.Once);
     }
 
+
     [Test]
-    public async Task LoginAsync_WithValidCredentials_ReturnsAccount()
+    public async Task LoginAsync_WithValidCredentials_ReturnsLoginResponse()
     {
+        var policyholderId = Guid.NewGuid();
+
         var account = new Account
         {
             Id = Guid.NewGuid(),
-            PolicyholderId = Guid.NewGuid(),
+            PolicyholderId = policyholderId,
             Username = "johnsmith",
-            PasswordHash =
-                BCrypt.Net.BCrypt.HashPassword(
-                    "Password123!")
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!")
         };
 
         accountRepository
@@ -201,12 +198,15 @@ public class RegistrationServiceTests
             Password = "Password123!"
         };
 
-        var result =
-            await authService.LoginAsync(request);
+        var result = await authService.LoginAsync(request);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result!.Username, Is.EqualTo("johnsmith"));
+        Assert.That(result.PolicyholderId, Is.EqualTo(policyholderId));
+        Assert.That(result.Message, Is.EqualTo("Login successful."));
+        Assert.That(result.GetType().GetProperty("PasswordHash"),Is.Null);
     }
+
 
     [Test]
     public async Task RegisterAsync_WhenUsernameExists_SavesNothing()
@@ -285,10 +285,7 @@ public class RegistrationServiceTests
         var result =
             await service.RegisterAsync(request);
 
-        Assert.That(
-    result,
-    Is.EqualTo(RegistrationResult.UsernameExists));
-
+        Assert.That(result,Is.EqualTo(RegistrationResult.UsernameExists));
         registrationRepository.Verify(
             repository =>
                 repository.AddRegistrationAsync(

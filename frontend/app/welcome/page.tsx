@@ -1,6 +1,30 @@
-import Link from "next/link";
+
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  clearLoggedIn,
+  isLoggedIn,
+} from "@/services/authSession";
 
 export default function WelcomePage() {
+  const router = useRouter();
+  const [authorized] = useState(() => isLoggedIn());
+
+  if (!authorized) {
+    if (typeof window !== "undefined") {
+      router.replace("/");
+    }
+
+    return null;
+  }
+
+  const handleLogout = () => {
+    clearLoggedIn();
+    router.replace("/");
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
       <div className="w-full max-w-2xl rounded-xl bg-white p-10 text-center shadow-lg">
@@ -12,12 +36,13 @@ export default function WelcomePage() {
           You have successfully logged in.
         </p>
 
-        <Link
-          href="/"
+        <button
+          type="button"
+          onClick={handleLogout}
           className="inline-block rounded-md bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
         >
-          Go to Login
-        </Link>
+          Logout
+        </button>
       </div>
     </main>
   );

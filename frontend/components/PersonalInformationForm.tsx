@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegistration } from "@/context/RegistrationContext";
-
+import { validatePolicyholder as validatePolicyholderRequest } from "@/services/authService";
 type FormErrors = {
   ssn: string;
   policyNumber: string;
@@ -144,49 +144,41 @@ export default function PersonalInformationForm() {
     );
   };
 
-  const validatePolicyholder = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
 
-    const isValid = validateForm();
+const validatePolicyholder = async (
+  event: React.FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault();
 
-    if (!isValid) {
-      return;
-    }
+  const isValid = validateForm();
 
-    setLoading(true);
-    setMessage("");
+  if (!isValid) {
+    return;
+  }
 
-    try {
-      const response = await fetch(
-        "http://localhost:5200/api/Auth/validate-policyholder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(personalInformation),
-        }
+  setLoading(true);
+  setMessage("");
+
+  try {
+    const { response, data } = await validatePolicyholderRequest(
+      personalInformation
+    );
+
+    if (response.ok) {
+      router.push("/register/account");
+    } else {
+      setMessage(
+        data.message ||
+          "Policyholder information could not be validated."
       );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("");
-        router.push("/register/account");
-      } else {
-        setMessage(
-          data.message ||
-            "Policyholder information could not be validated."
-        );
-      }
-    } catch {
-      setMessage("Unable to connect to the backend.");
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch {
+    setMessage("Unable to connect to the backend.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
@@ -244,7 +236,7 @@ export default function PersonalInformationForm() {
 
             {errors.ssn && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.ssn} ❗
+                {errors.ssn} Ã¢Ââ€”
               </p>
             )}
           </div>
@@ -271,12 +263,12 @@ export default function PersonalInformationForm() {
 
             {errors.policyNumber && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.policyNumber} ❗
+                {errors.policyNumber} Ã¢Ââ€”
               </p>
             )}
 
             <p className="mt-2 text-sm text-blue-700">
-              ℹ Your policy number can be found on your original policy document.
+              Ã¢â€žÂ¹ Your policy number can be found on your original policy document.
             </p>
           </div>
 
@@ -302,7 +294,7 @@ export default function PersonalInformationForm() {
 
             {errors.firstName && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.firstName} ❗
+                {errors.firstName} Ã¢Ââ€”
               </p>
             )}
           </div>
@@ -329,7 +321,7 @@ export default function PersonalInformationForm() {
 
             {errors.lastName && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.lastName} ❗
+                {errors.lastName} Ã¢Ââ€”
               </p>
             )}
           </div>
@@ -358,7 +350,7 @@ export default function PersonalInformationForm() {
 
             {errors.dateOfBirth && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.dateOfBirth} ❗
+                {errors.dateOfBirth} Ã¢Ââ€”
               </p>
             )}
           </div>
@@ -386,7 +378,7 @@ export default function PersonalInformationForm() {
 
             {errors.zipCode && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.zipCode} ❗
+                {errors.zipCode} Ã¢Ââ€”
               </p>
             )}
           </div>
@@ -399,11 +391,24 @@ export default function PersonalInformationForm() {
             {loading ? "Validating..." : "Continue"}
           </button>
 
+
           {message && (
-            <p className="text-center text-sm font-medium text-red-600">
-              {message}
-            </p>
+            <div className="text-center">
+              <p className="text-sm font-medium text-red-600">
+                {message}
+              </p>
+              {message.includes("already exists") && (
+                <button
+                  type="button"
+                  onClick={() => router.push("/")}
+                  className="mt-2 font-semibold text-blue-600 underline hover:text-blue-800"
+                >
+                  Go to Login
+                </button>
+              )}
+            </div>
           )}
+
         </form>
       </div>
     </main>

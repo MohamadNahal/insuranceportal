@@ -20,24 +20,30 @@ public class RegistrationService : IRegistrationService
         this.registrationRepository = registrationRepository;
     }
 
-    public async Task<PolicyholderValidationResult> ValidatePolicyholderAsync(
-        PolicyholderValidationRequest request)
-    {
-        var policyholder = await policyholderRepository.FindPolicyholderAsync(
-                request.SSN,
-                request.PolicyNumber,
-                request.FirstName,
-                request.LastName,
-                request.DateOfBirth,
-                request.ZipCode);
-
-        if (policyholder == null)
+    public async Task<PolicyholderValidationResult> ValidatePolicyholderAsync(PolicyholderValidationRequest request)
 {
-    return PolicyholderValidationResult.NotFound;
-}
+    var policyholder = await policyholderRepository.FindPolicyholderAsync(
+        request.SSN,
+        request.PolicyNumber,
+        request.FirstName,
+        request.LastName,
+        request.DateOfBirth,
+        request.ZipCode);
 
-return PolicyholderValidationResult.Validated;
+    if (policyholder == null)
+    {
+        return PolicyholderValidationResult.NotFound;
     }
+
+    var policyholderHasAccount = await accountRepository.PolicyholderHasAccountAsync(policyholder.Id);
+
+    if (policyholderHasAccount)
+    {
+        return PolicyholderValidationResult.AlreadyRegistered;
+    }
+
+    return PolicyholderValidationResult.Validated;
+}
 
     public async Task<RegistrationResult> RegisterAsync(RegisterRequest request)
     {

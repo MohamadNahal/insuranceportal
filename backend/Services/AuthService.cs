@@ -1,5 +1,5 @@
+
 using InsurancePortalRegistration.DTOs;
-using InsurancePortalRegistration.Entities;
 using InsurancePortalRegistration.Repositories;
 
 namespace InsurancePortalRegistration.Services;
@@ -13,21 +13,29 @@ public class AuthService : IAuthService
         this.accountRepository = accountRepository;
     }
 
-    public async Task<Account?> LoginAsync(LoginRequest request)
+    public async Task<LoginResponse?> LoginAsync(LoginRequest request)
     {
-        var account = await accountRepository.FindByUsernameAsync(request.Username);
+        var account =
+            await accountRepository.FindByUsernameAsync(request.Username);
 
         if (account == null)
         {
             return null;
         }
 
-        var passwordValid = BCrypt.Net.BCrypt.Verify(request.Password,account.PasswordHash);
+        var passwordValid = BCrypt.Net.BCrypt.Verify(
+            request.Password,
+            account.PasswordHash);
+
         if (!passwordValid)
         {
             return null;
         }
 
-        return account;
+        return new LoginResponse
+        {
+            Username = account.Username,
+            PolicyholderId = account.PolicyholderId
+        };
     }
 }

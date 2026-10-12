@@ -1,9 +1,8 @@
 using InsurancePortalRegistration.DTOs;
-using InsurancePortalRegistration.Entities;
 
 namespace InsurancePortalRegistration.Services;
 
 public interface IAuthService
 {
-    Task<Account?> LoginAsync(LoginRequest request);
+    Task<LoginResponse?> LoginAsync(LoginRequest request);
 }
