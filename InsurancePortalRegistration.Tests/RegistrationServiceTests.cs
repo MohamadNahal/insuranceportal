@@ -78,6 +78,50 @@ public class RegistrationServiceTests
     result,
     Is.EqualTo(PolicyholderValidationResult.Validated));
     }
+    [Test]
+    public async Task ValidatePolicyholderAsync_WhenPolicyholderAlreadyRegistered_ReturnsAlreadyRegistered()
+    {
+        var policyholder = new Policyholder
+        {
+            Id = Guid.NewGuid(),
+            SSN = "1234",
+            PolicyNumber = "AB1234567",
+            FirstName = "John",
+            LastName = "Smith",
+            DateOfBirth = "01/01/1990",
+            ZipCode = "12345"
+        };
+
+        policyholderRepository
+            .Setup(repository =>
+                repository.FindPolicyholderAsync(
+                    "1234",
+                    "AB1234567",
+                    "John",
+                    "Smith",
+                    "01/01/1990",
+                    "12345"))
+            .ReturnsAsync(policyholder);
+
+        accountRepository
+            .Setup(repository =>
+                repository.PolicyholderHasAccountAsync(policyholder.Id))
+            .ReturnsAsync(true);
+
+        var request = new PolicyholderValidationRequest
+        {
+            SSN = "1234",
+            PolicyNumber = "AB1234567",
+            FirstName = "John",
+            LastName = "Smith",
+            DateOfBirth = "01/01/1990",
+            ZipCode = "12345"
+        };
+
+        var result = await service.ValidatePolicyholderAsync(request);
+
+        Assert.That(result, Is.EqualTo(PolicyholderValidationResult.AlreadyRegistered));
+    }
 
     [Test]
     public async Task RegisterAsync_WithValidInformation_ReturnsRegistered()
@@ -475,6 +519,39 @@ public class RegistrationServiceTests
         Assert.That(
             result,
             Is.EqualTo(PolicyholderValidationResult.NotFound));
+    }
+    [Test]
+    public async Task ValidatePolicyholderAsync_WhenPolicyholderDoesNotExist_DoesNotCheckAccount()
+    {
+        policyholderRepository
+            .Setup(repository =>
+                repository.FindPolicyholderAsync(
+                    "9999",
+                    "ZZ9999999",
+                    "Unknown",
+                    "Person",
+                    "01/01/1990",
+                    "99999"))
+            .ReturnsAsync((Policyholder?)null);
+
+        var request = new PolicyholderValidationRequest
+        {
+            SSN = "9999",
+            PolicyNumber = "ZZ9999999",
+            FirstName = "Unknown",
+            LastName = "Person",
+            DateOfBirth = "01/01/1990",
+            ZipCode = "99999"
+        };
+
+        var result = await service.ValidatePolicyholderAsync(request);
+
+        Assert.That(result, Is.EqualTo(PolicyholderValidationResult.NotFound));
+
+        accountRepository.Verify(
+            repository => repository.PolicyholderHasAccountAsync(
+                It.IsAny<Guid>()),
+            Times.Never);
     }
 
     [Test]
