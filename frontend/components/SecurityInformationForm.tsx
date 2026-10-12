@@ -15,6 +15,7 @@ export default function SecurityInformationForm() {
   const {
     securityInformation,
     setSecurityInformation,
+    setCompletedStep,
   } = useRegistration();
 
   const [errors, setErrors] = useState<FormErrors>({
@@ -78,6 +79,7 @@ export default function SecurityInformationForm() {
       return;
     }
 
+    setCompletedStep(3);
     router.push("/register/contact");
   };
 

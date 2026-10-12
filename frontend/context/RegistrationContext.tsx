@@ -38,27 +38,26 @@ type RegistrationContextType = {
   setPersonalInformation: React.Dispatch<
     React.SetStateAction<PersonalInformation>
   >;
-
   accountInformation: AccountInformation;
   setAccountInformation: React.Dispatch<
     React.SetStateAction<AccountInformation>
   >;
-
   securityInformation: SecurityInformation;
   setSecurityInformation: React.Dispatch<
     React.SetStateAction<SecurityInformation>
   >;
-
   contactInformation: ContactInformation;
   setContactInformation: React.Dispatch<
     React.SetStateAction<ContactInformation>
   >;
+  completedStep: number;
+  setCompletedStep: React.Dispatch<
+    React.SetStateAction<number>
+  >;
 };
 
 const RegistrationContext =
-  createContext<RegistrationContextType | undefined>(
-    undefined
-  );
+  createContext<RegistrationContextType | undefined>(undefined);
 
 export function RegistrationProvider({
   children,
@@ -100,6 +99,8 @@ export function RegistrationProvider({
       country: "USA",
     });
 
+  const [completedStep, setCompletedStep] = useState(0);
+
   return (
     <RegistrationContext.Provider
       value={{
@@ -111,6 +112,8 @@ export function RegistrationProvider({
         setSecurityInformation,
         contactInformation,
         setContactInformation,
+        completedStep,
+        setCompletedStep,
       }}
     >
       {children}

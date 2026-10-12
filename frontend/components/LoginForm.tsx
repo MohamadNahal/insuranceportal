@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/authService";
-import { setLoggedIn } from "@/services/authSession";
 
 type FormErrors = {
   username: string;
@@ -93,9 +92,8 @@ export default function LoginForm() {
       });
 
       if (response.ok) {
-      setLoggedIn();
-      router.push("/welcome");
-      } else {
+        router.push("/welcome");
+        } else {
         setMessage(
           data.message ||
             "Invalid username or password."

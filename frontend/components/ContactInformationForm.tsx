@@ -25,6 +25,7 @@ export default function ContactInformationForm() {
     securityInformation,
     contactInformation,
     setContactInformation,
+    setCompletedStep,
   } = useRegistration();
 
   const [errors, setErrors] = useState<FormErrors>({
@@ -141,9 +142,7 @@ export default function ContactInformationForm() {
   ) => {
     event.preventDefault();
 
-    const isValid = validateForm();
-
-    if (!isValid) {
+    if (!validateForm()) {
       return;
     }
 
@@ -159,11 +158,10 @@ export default function ContactInformationForm() {
       });
 
       if (response.ok) {
+        setCompletedStep(4);
         router.push("/register/success");
       } else {
-        setMessage(
-          data.message || "Registration failed."
-        );
+        setMessage(data.message || "Registration failed.");
       }
     } catch {
       setMessage("Unable to connect to the backend.");
@@ -184,35 +182,17 @@ export default function ContactInformationForm() {
         </p>
 
         <div className="mb-8 flex justify-between rounded-lg bg-gray-100 p-3 text-sm">
-          <span className="text-gray-500">
-            1. Personal Info
-          </span>
-
-          <span className="text-gray-500">
-            2. Account
-          </span>
-
-          <span className="text-gray-500">
-            3. Security
-          </span>
-
-          <span className="font-bold text-blue-600">
-            4. Contact
-          </span>
+          <span className="text-gray-500">1. Personal Info</span>
+          <span className="text-gray-500">2. Account</span>
+          <span className="text-gray-500">3. Security</span>
+          <span className="font-bold text-blue-600">4. Contact</span>
         </div>
 
-        <form
-          onSubmit={handleContinue}
-          className="space-y-5"
-        >
+        <form onSubmit={handleContinue} className="space-y-5">
           <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-800">
               Email
             </label>
-
             <input
               id="email"
               name="email"
@@ -225,7 +205,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.email && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.email} ❗
@@ -234,13 +213,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="phone"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-gray-800">
               Phone
             </label>
-
             <input
               id="phone"
               name="phone"
@@ -254,7 +229,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.phone && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.phone} ❗
@@ -263,13 +237,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="streetAddress"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="streetAddress" className="mb-2 block text-sm font-semibold text-gray-800">
               Street Address
             </label>
-
             <input
               id="streetAddress"
               name="streetAddress"
@@ -281,7 +251,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.streetAddress && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.streetAddress} ❗
@@ -290,13 +259,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="streetAddressLine2"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="streetAddressLine2" className="mb-2 block text-sm font-semibold text-gray-800">
               Street Address Line 2
             </label>
-
             <input
               id="streetAddressLine2"
               name="streetAddressLine2"
@@ -308,7 +273,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.streetAddressLine2 && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.streetAddressLine2} ❗
@@ -317,13 +281,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="city"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="city" className="mb-2 block text-sm font-semibold text-gray-800">
               City
             </label>
-
             <input
               id="city"
               name="city"
@@ -335,7 +295,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.city && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.city} ❗
@@ -344,13 +303,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="state"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="state" className="mb-2 block text-sm font-semibold text-gray-800">
               State
             </label>
-
             <input
               id="state"
               name="state"
@@ -362,7 +317,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.state && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.state} ❗
@@ -371,13 +325,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="zipCode"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="zipCode" className="mb-2 block text-sm font-semibold text-gray-800">
               ZIP Code
             </label>
-
             <input
               id="zipCode"
               name="zipCode"
@@ -390,7 +340,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.zipCode && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.zipCode} ❗
@@ -399,13 +348,9 @@ export default function ContactInformationForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="country"
-              className="mb-2 block text-sm font-semibold text-gray-800"
-            >
+            <label htmlFor="country" className="mb-2 block text-sm font-semibold text-gray-800">
               Country
             </label>
-
             <input
               id="country"
               name="country"
@@ -417,7 +362,6 @@ export default function ContactInformationForm() {
                   : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
               }`}
             />
-
             {errors.country && (
               <p className="mt-1 text-sm font-medium text-red-500">
                 {errors.country} ❗

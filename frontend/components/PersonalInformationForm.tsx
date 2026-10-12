@@ -19,6 +19,7 @@ export default function PersonalInformationForm() {
   const {
     personalInformation,
     setPersonalInformation,
+    setCompletedStep,
   } = useRegistration();
 
   const [message, setMessage] = useState("");
@@ -165,6 +166,7 @@ const validatePolicyholder = async (
     );
 
     if (response.ok) {
+      setCompletedStep(1);
       router.push("/register/account");
     } else {
       setMessage(
@@ -268,7 +270,7 @@ const validatePolicyholder = async (
             )}
 
             <p className="mt-2 text-sm text-blue-700">
-              Ã¢â€žÂ¹ Your policy number can be found on your original policy document.
+              Your policy number can be found on your original policy document.
             </p>
           </div>
 

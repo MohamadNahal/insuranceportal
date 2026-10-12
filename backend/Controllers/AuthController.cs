@@ -3,7 +3,10 @@ using InsurancePortalRegistration.DTOs;
 using InsurancePortalRegistration.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 namespace InsurancePortalRegistration.Controllers;
 
 [ApiController]
@@ -105,6 +108,45 @@ public class AuthController : ControllerBase
             });
         }
 
-        return Ok(response);
-    }
+        var claims = new List<Claim>
+    {
+        new(ClaimTypes.Name, response.Username),
+        new("PolicyholderId", response.PolicyholderId.ToString())
+    };
+
+    var identity = new ClaimsIdentity(
+        claims,
+        CookieAuthenticationDefaults.AuthenticationScheme);
+
+    var principal = new ClaimsPrincipal(identity);
+
+    await HttpContext.SignInAsync(
+        CookieAuthenticationDefaults.AuthenticationScheme,
+        principal);
+
+    return Ok(response);
+        }
+
+    [HttpGet("me")]
+[Authorize]
+public IActionResult GetCurrentUser()
+{
+    return Ok(new
+    {
+        username = User.Identity?.Name,
+        policyholderId = User.FindFirst("PolicyholderId")?.Value
+    });
+}
+
+[HttpPost("logout")]
+public async Task<IActionResult> Logout()
+{
+    await HttpContext.SignOutAsync(
+        CookieAuthenticationDefaults.AuthenticationScheme);
+
+    return Ok(new
+    {
+        message = "Logged out successfully."
+    });
+}
 }

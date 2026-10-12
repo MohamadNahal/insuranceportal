@@ -2,28 +2,25 @@ import { useState } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import AccountInformationForm from "@/components/AccountInformationForm";
-
 const mockPush = vi.fn();
-
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
+useRouter: () => ({
+push: mockPush,
+}),
 }));
-
 vi.mock("@/context/RegistrationContext", () => ({
-  useRegistration: () => {
-    const [accountInformation, setAccountInformation] = useState({
-      username: "",
-      password: "",
-      confirmPassword: "",
-    });
-
-    return {
-      accountInformation,
-      setAccountInformation,
-    };
-  },
+useRegistration: () => {
+const [accountInformation, setAccountInformation] = useState({
+username: "",
+password: "",
+confirmPassword: "",
+});
+return {
+  accountInformation,
+  setAccountInformation,
+  setCompletedStep: vi.fn(),
+};
+},
 }));
 
 describe("AccountInformationForm", () => {

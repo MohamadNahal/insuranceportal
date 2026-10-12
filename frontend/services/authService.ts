@@ -100,10 +100,38 @@ export async function registerUser(request: RegisterRequest) {
 export async function loginUser(request: LoginRequest) {
   const response = await fetch(`${API_BASE_URL}/Auth/login`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
+  });
+
+  const data = await readResponse(response);
+
+  return {
+    response,
+    data,
+  };
+}
+export async function getCurrentUser() {
+  const response = await fetch(`${API_BASE_URL}/Auth/me`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await readResponse(response);
+
+  return {
+    response,
+    data,
+  };
+}
+
+export async function logoutUser() {
+  const response = await fetch(`${API_BASE_URL}/Auth/logout`, {
+    method: "POST",
+    credentials: "include",
   });
 
   const data = await readResponse(response);

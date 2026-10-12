@@ -16,6 +16,7 @@ export default function AccountInformationForm() {
   const {
     accountInformation,
     setAccountInformation,
+    setCompletedStep,
   } = useRegistration();
 
   const [errors, setErrors] = useState<FormErrors>({
@@ -104,7 +105,7 @@ export default function AccountInformationForm() {
     if (!isValid) {
       return;
     }
-
+    setCompletedStep(2);
     router.push("/register/security");
   };
 
