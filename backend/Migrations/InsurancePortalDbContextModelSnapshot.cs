@@ -22,7 +22,7 @@ namespace InsurancePortalRegistration.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.Account", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.Account", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace InsurancePortalRegistration.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.ContactInformation", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.ContactInformation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,8 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PolicyholderId");
+                    b.HasIndex("PolicyholderId")
+                        .IsUnique();
 
                     b.ToTable("Contacts", null, t =>
                         {
@@ -111,7 +112,7 @@ namespace InsurancePortalRegistration.Migrations
                         });
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.Policyholder", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.Policyholder", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +168,7 @@ namespace InsurancePortalRegistration.Migrations
                         });
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.SecurityInformation", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.SecurityInformation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,32 +189,33 @@ namespace InsurancePortalRegistration.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PolicyholderId");
+                    b.HasIndex("PolicyholderId")
+                        .IsUnique();
 
                     b.ToTable("SecurityInformation");
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.Account", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.Account", b =>
                 {
-                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                    b.HasOne("InsurancePortalRegistration.Entities.Policyholder", null)
                         .WithMany()
                         .HasForeignKey("PolicyholderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.ContactInformation", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.ContactInformation", b =>
                 {
-                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                    b.HasOne("InsurancePortalRegistration.Entities.Policyholder", null)
                         .WithMany()
                         .HasForeignKey("PolicyholderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("InsurancePortalRegistration.Models.SecurityInformation", b =>
+            modelBuilder.Entity("InsurancePortalRegistration.Entities.SecurityInformation", b =>
                 {
-                    b.HasOne("InsurancePortalRegistration.Models.Policyholder", null)
+                    b.HasOne("InsurancePortalRegistration.Entities.Policyholder", null)
                         .WithMany()
                         .HasForeignKey("PolicyholderId")
                         .OnDelete(DeleteBehavior.Restrict)

@@ -49,14 +49,15 @@ export default function AccountInformationForm() {
       confirmPassword: "",
     };
 
-    if (!accountInformation.username.trim()) {
+    const username = accountInformation.username.trim();
+    if (!username) {
+
       newErrors.username = "Please enter a username";
-    } else if (
-      accountInformation.username.length < 6 ||
-      accountInformation.username.length > 18
-    ) {
-      newErrors.username =
-        "Username must be between 6 and 18 characters";
+      
+    } else if (username.length < 6 || username.length > 18) {
+
+      newErrors.username ="Username must be between 6 and 18 characters";
+
     }
 
     if (!accountInformation.password) {

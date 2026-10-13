@@ -28,7 +28,7 @@ public class SqlContactRepository : IContactRepository
                 ex,
                 "Could not add contact information.");
 
-            throw new CouldNotAddContactException();
+            throw new CouldNotAddContactException(ex);
         }
     }
 }

@@ -13,4 +13,5 @@ public class SecurityInformation
 
     [MaxLength(255)]
     public string ChildhoodHeroHash { get; set; } = "";
+    public Policyholder? Policyholder { get; set; }
 }

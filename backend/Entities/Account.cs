@@ -13,4 +13,6 @@ public class Account
 
     [MaxLength(255)]
     public string PasswordHash { get; set; } = "";
+
+    public Policyholder? Policyholder { get; set; }
 }

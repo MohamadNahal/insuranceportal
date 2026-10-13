@@ -28,7 +28,7 @@ public class SqlSecurityInformationRepository
             logger.LogError(
                 ex,
                 "Could not add security information.");
-            throw new CouldNotAddSecurityInformationException();
+            throw new CouldNotAddSecurityInformationException(ex);
         }
     }
 }

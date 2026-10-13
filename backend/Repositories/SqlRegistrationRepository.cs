@@ -1,3 +1,4 @@
+
 using InsurancePortalRegistration.Data;
 using InsurancePortalRegistration.Exceptions;
 using InsurancePortalRegistration.Entities;
@@ -37,16 +38,23 @@ public class SqlRegistrationRepository : IRegistrationRepository
                 (sqlException.Number == 2601 ||
                  sqlException.Number == 2627))
             {
+                var message = sqlException.Message.Contains(
+                    "Username",
+                    StringComparison.OrdinalIgnoreCase)
+                    ? "Username already exists."
+                    : "A registration record conflicts with existing data.";
+
                 logger.LogWarning(
                     ex,
-                    "Username already exists.");
+                    "A duplicate-key conflict occurred during registration.");
 
-                throw new DuplicateRegistrationException();
+                throw new DuplicateRegistrationException(message, ex);
             }
 
             logger.LogError(
                 ex,
                 "Could not complete registration.");
+
             throw;
         }
     }

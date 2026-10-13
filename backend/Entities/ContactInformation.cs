@@ -31,4 +31,5 @@ public class ContactInformation
 
     [MaxLength(100)]
     public string Country { get; set; } = "";
+    public Policyholder? Policyholder { get; set; }
 }

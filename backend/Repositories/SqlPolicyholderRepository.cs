@@ -10,7 +10,9 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
     private readonly InsurancePortalDbContext context;
     private readonly ILogger<SqlPolicyholderRepository> logger;
 
-    public SqlPolicyholderRepository(InsurancePortalDbContext context,ILogger<SqlPolicyholderRepository> logger)
+    public SqlPolicyholderRepository(
+        InsurancePortalDbContext context,
+        ILogger<SqlPolicyholderRepository> logger)
     {
         this.context = context;
         this.logger = logger;
@@ -27,6 +29,7 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
         try
         {
             return await context.Policyholders
+                .AsNoTracking()
                 .FirstOrDefaultAsync(policyholder =>
                     policyholder.SSN == ssn &&
                     policyholder.PolicyNumber == policyNumber &&
@@ -41,7 +44,7 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
                 ex,
                 "Could not find policyholder.");
 
-            throw new CouldNotFindPolicyholderException();
+            throw new CouldNotFindPolicyholderException(ex);
         }
     }
 
@@ -50,6 +53,7 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
         try
         {
             return await context.Policyholders
+                .AsNoTracking()
                 .FirstOrDefaultAsync(
                     policyholder => policyholder.Id == id);
         }
@@ -58,7 +62,8 @@ public class SqlPolicyholderRepository : IPolicyholderRepository
             logger.LogError(
                 ex,
                 "Could not find policyholder by ID.");
-            throw new CouldNotFindPolicyholderException();
+
+            throw new CouldNotFindPolicyholderException(ex);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace InsurancePortalRegistration.Data;
 public class InsurancePortalDbContext : DbContext
 {
     public InsurancePortalDbContext(
-        DbContextOptions<InsurancePortalDbContext> options): base(options)
+        DbContextOptions<InsurancePortalDbContext> options) : base(options)
     {
     }
 
@@ -28,22 +28,32 @@ public class InsurancePortalDbContext : DbContext
             .HasIndex(account => account.PolicyholderId)
             .IsUnique();
 
+        modelBuilder.Entity<ContactInformation>()
+            .HasIndex(contact => contact.PolicyholderId)
+            .IsUnique();
+
+        modelBuilder.Entity<SecurityInformation>()
+            .HasIndex(security => security.PolicyholderId)
+            .IsUnique();
+
         modelBuilder.Entity<Account>()
-            .HasOne<Policyholder>()
-            .WithMany()
-            .HasForeignKey(account => account.PolicyholderId)
+            .HasOne(account => account.Policyholder)
+            .WithOne(policyholder => policyholder.Account)
+            .HasForeignKey<Account>(account => account.PolicyholderId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ContactInformation>()
-            .HasOne<Policyholder>()
-            .WithMany()
-            .HasForeignKey(contact => contact.PolicyholderId)
+            .HasOne(contact => contact.Policyholder)
+            .WithOne(policyholder => policyholder.ContactInformation)
+            .HasForeignKey<ContactInformation>(
+                contact => contact.PolicyholderId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<SecurityInformation>()
-            .HasOne<Policyholder>()
-            .WithMany()
-            .HasForeignKey(security => security.PolicyholderId)
+            .HasOne(security => security.Policyholder)
+            .WithOne(policyholder => policyholder.SecurityInformation)
+            .HasForeignKey<SecurityInformation>(
+                security => security.PolicyholderId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Policyholder>()

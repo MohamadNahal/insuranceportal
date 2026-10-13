@@ -1,6 +1,29 @@
-@InsurancePortalRegistration_HostAddress = http://localhost:5100
 
-GET {{InsurancePortalRegistration_HostAddress}}/weatherforecast/
+@InsurancePortalRegistration_HostAddress = http://localhost:5200
+
+### Validate policyholder information
+POST {{InsurancePortalRegistration_HostAddress}}/api/Auth/validate-policyholder
+Content-Type: application/json
+Accept: application/problem+json
+
+{
+  "ssn": "7777",
+  "policyNumber": "VA7777777",
+  "firstName": "Monica",
+  "lastName": "Geller",
+  "dateOfBirth": "06/18/1990",
+  "zipCode": "99501"
+}
+###
+
+### Check current authenticated user
+GET {{InsurancePortalRegistration_HostAddress}}/api/Auth/me
+Accept: application/json
+
+###
+
+### Log out
+POST {{InsurancePortalRegistration_HostAddress}}/api/Auth/logout
 Accept: application/json
 
 ###

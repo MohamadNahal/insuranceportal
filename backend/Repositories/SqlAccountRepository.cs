@@ -30,7 +30,7 @@ public class SqlAccountRepository : IAccountRepository
                 ex,
                 "Could not check whether username exists.");
 
-            throw new CouldNotFindAccountException();
+           throw new CouldNotFindAccountException(ex);
         }
     }
 
@@ -48,7 +48,7 @@ public class SqlAccountRepository : IAccountRepository
                 ex,
                 "Could not check whether policyholder has an account.");
 
-            throw new CouldNotFindAccountException();
+            throw new CouldNotFindAccountException(ex);
         }
     }
 
@@ -65,7 +65,7 @@ public class SqlAccountRepository : IAccountRepository
                 ex,
                 "Could not add account.");
 
-            throw new CouldNotAddAccountException();
+            throw new CouldNotAddAccountException(ex);
         }
     }
 
@@ -74,6 +74,7 @@ public class SqlAccountRepository : IAccountRepository
         try
         {
             return await context.Accounts
+                .AsNoTracking()
                 .FirstOrDefaultAsync(account =>
                     account.Username == username);
         }
@@ -83,7 +84,7 @@ public class SqlAccountRepository : IAccountRepository
                 ex,
                 "Could not find account by username.");
 
-            throw new CouldNotFindAccountException();
+            throw new CouldNotFindAccountException(ex);
         }
     }
 }

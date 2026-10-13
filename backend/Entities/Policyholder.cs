@@ -1,6 +1,8 @@
+
 using System.ComponentModel.DataAnnotations;
 
 namespace InsurancePortalRegistration.Entities;
+
 public class Policyholder
 {
     public Guid Id { get; set; }
@@ -28,4 +30,10 @@ public class Policyholder
 
     [MaxLength(10)]
     public string Phone { get; set; } = "";
+
+    public Account? Account { get; set; }
+
+    public ContactInformation? ContactInformation { get; set; }
+
+    public SecurityInformation? SecurityInformation { get; set; }
 }

@@ -6,4 +6,9 @@ public class CouldNotFindPolicyholderException : Exception
         : base("Could not find policyholder.")
     {
     }
+
+    public CouldNotFindPolicyholderException(Exception innerException)
+        : base("Could not find policyholder.", innerException)
+    {
+    }
 }

@@ -92,7 +92,87 @@ public class DTOValidationTests
 
         Assert.That(results, Is.Not.Empty);
     }
+    [Test]
+    public void AccountInformationRequest_WithWhitespaceOnlyUsername_IsInvalid()
+    {
+        var request = new AccountInformationRequest
+        {
+            Username = "       ",
+            Password = "Password123!",
+            ConfirmPassword = "Password123!"
+        };
 
+        var results = Validate(request);
+
+        Assert.That(results, Is.Not.Empty);
+    }
+    [Test]
+    public void ContactInformationRequest_WithEmailTooLong_IsInvalid()
+    {
+        var request = ValidContactRequest();
+        request.Email = new string('a', 247) + "@test.com";
+
+        Assert.That(Validate(request), Is.Not.Empty);
+    }
+
+    [Test]
+    public void ContactInformationRequest_WithPhoneTooLong_IsInvalid()
+    {
+        var request = ValidContactRequest();
+        request.Phone = "12345678901";
+
+        Assert.That(Validate(request), Is.Not.Empty);
+    }
+
+    [Test]
+    public void ContactInformationRequest_WithStreetAddressTooLong_IsInvalid()
+    {
+        var request = ValidContactRequest();
+        request.StreetAddress = new string('a', 201);
+
+        Assert.That(Validate(request), Is.Not.Empty);
+    }
+
+    [Test]
+    public void ContactInformationRequest_WithCityTooLong_IsInvalid()
+    {
+        var request = ValidContactRequest();
+        request.City = new string('a', 101);
+
+        Assert.That(Validate(request), Is.Not.Empty);
+    }
+
+    [Test]
+    public void ContactInformationRequest_WithCountryTooLong_IsInvalid()
+    {
+        var request = ValidContactRequest();
+        request.Country = new string('a', 101);
+
+        Assert.That(Validate(request), Is.Not.Empty);
+    }
+
+    [Test]
+    public void ContactInformationRequest_WithValidData_IsValid()
+    {
+        var request = ValidContactRequest();
+
+        Assert.That(Validate(request), Is.Empty);
+    }
+
+    private static ContactInformationRequest ValidContactRequest()
+    {
+        return new ContactInformationRequest
+        {
+            Email = "john@example.com",
+            Phone = "1234567890",
+            StreetAddress = "123 Main Street",
+            StreetAddressLine2 = "",
+            City = "Boston",
+            State = "Massachusetts",
+            ZipCode = "12345",
+            Country = "USA"
+        };
+    }
     private static List<ValidationResult> Validate(object model)
     {
         var results = new List<ValidationResult>();
