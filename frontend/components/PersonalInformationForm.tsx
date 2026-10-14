@@ -165,15 +165,29 @@ const validatePolicyholder = async (
       personalInformation
     );
 
+    
     if (response.ok) {
       setCompletedStep(1);
       router.push("/register/account");
     } else {
-      setMessage(
-        data.message ||
-          "Policyholder information could not be validated."
-      );
+      const errorMessage =
+        data.detail || data.message || data.title || "";
+
+      if (
+        response.status === 409 ||
+        /already registered|already has an account/i.test(errorMessage)
+      ) {
+        setMessage(
+          "This policyholder already has an account. Please log in instead."
+        );
+      } else {
+        setMessage(
+          errorMessage ||
+            "Policyholder information could not be validated. Please check your details and try again."
+        );
+      }
     }
+
   } catch {
     setMessage("Unable to connect to the backend.");
   } finally {
@@ -238,7 +252,7 @@ const validatePolicyholder = async (
 
             {errors.ssn && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.ssn} Ã¢Ââ€”
+                {errors.ssn}
               </p>
             )}
           </div>
@@ -265,7 +279,7 @@ const validatePolicyholder = async (
 
             {errors.policyNumber && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.policyNumber} Ã¢Ââ€”
+                {errors.policyNumber}
               </p>
             )}
 
@@ -296,7 +310,7 @@ const validatePolicyholder = async (
 
             {errors.firstName && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.firstName} Ã¢Ââ€”
+                {errors.firstName}
               </p>
             )}
           </div>
@@ -323,7 +337,7 @@ const validatePolicyholder = async (
 
             {errors.lastName && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.lastName} Ã¢Ââ€”
+                {errors.lastName}
               </p>
             )}
           </div>
@@ -352,7 +366,7 @@ const validatePolicyholder = async (
 
             {errors.dateOfBirth && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.dateOfBirth} Ã¢Ââ€”
+                {errors.dateOfBirth}
               </p>
             )}
           </div>
@@ -380,7 +394,7 @@ const validatePolicyholder = async (
 
             {errors.zipCode && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.zipCode} Ã¢Ââ€”
+                {errors.zipCode}
               </p>
             )}
           </div>

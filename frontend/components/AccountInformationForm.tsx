@@ -53,7 +53,7 @@ export default function AccountInformationForm() {
     if (!username) {
 
       newErrors.username = "Please enter a username";
-      
+
     } else if (username.length < 6 || username.length > 18) {
 
       newErrors.username ="Username must be between 6 and 18 characters";
@@ -205,6 +205,7 @@ export default function AccountInformationForm() {
             >
               Confirm Password
             </label>
+            
 
             <input
               id="confirmPassword"
@@ -226,12 +227,24 @@ export default function AccountInformationForm() {
             )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-md bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
-          >
-            Continue
-          </button>
+          
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => router.push("/register/personal")}
+              className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
+            >
+              Back
+            </button>
+
+            <button
+              type="submit"
+              className="w-full rounded-md bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
+            >
+              Continue
+            </button>
+          </div>
+
         </form>
       </div>
     </main>

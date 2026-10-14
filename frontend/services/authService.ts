@@ -51,7 +51,7 @@ async function readResponse(response: Response) {
     return await response.json();
   } catch {
     return {
-      message: response.ok
+      title: response.ok
         ? "Request completed."
         : "The request could not be completed. Please try again.",
     };

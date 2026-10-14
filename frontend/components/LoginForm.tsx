@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/authService";
+import { useRegistration } from "@/context/RegistrationContext";
 
 type FormErrors = {
   username: string;
@@ -12,6 +13,7 @@ type FormErrors = {
 
 export default function LoginForm() {
   const router = useRouter();
+  const { resetRegistration } = useRegistration();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -188,12 +190,18 @@ export default function LoginForm() {
 
           <p className="text-center text-gray-700">
             New User?{" "}
-            <Link
-              href="/register/personal"
-              className="font-semibold text-blue-600 hover:text-blue-700"
-            >
-              Register here
-            </Link>
+            
+          <button
+            type="button"
+            onClick={() => {
+              resetRegistration();
+              router.push("/register/personal");
+            }}
+            className="font-semibold text-blue-600 hover:text-blue-700"
+          >
+            Register here
+          </button>
+
           </p>
 
           {message && (

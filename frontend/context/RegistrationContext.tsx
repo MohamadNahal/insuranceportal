@@ -1,7 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-
+import { createContext, useContext, useEffect, useState } from "react";
 type PersonalInformation = {
   ssn: string;
   policyNumber: string;
@@ -54,6 +53,10 @@ type RegistrationContextType = {
   setCompletedStep: React.Dispatch<
     React.SetStateAction<number>
   >;
+  draftEnabled: boolean;
+  setDraftEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  resetRegistration: () => void;
+  
 };
 
 const RegistrationContext =
@@ -100,6 +103,113 @@ export function RegistrationProvider({
     });
 
   const [completedStep, setCompletedStep] = useState(0);
+  
+  const resetRegistration = () => {
+    setPersonalInformation({
+      ssn: "",
+      policyNumber: "",
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      zipCode: "",
+    });
+
+    setAccountInformation({
+      username: "",
+      password: "",
+      confirmPassword: "",
+    });
+
+    setSecurityInformation({
+      nickname: "",
+      childhoodHero: "",
+    });
+
+    setContactInformation({
+      email: "",
+      phone: "",
+      streetAddress: "",
+      streetAddressLine2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "USA",
+    });
+
+    setCompletedStep(0);
+    sessionStorage.removeItem("registrationDraft");
+  };
+
+  const [draftLoaded, setDraftLoaded] = useState(false);
+  const [draftEnabled, setDraftEnabled] = useState(true);
+
+  
+  useEffect(() => {
+    const savedDraft = sessionStorage.getItem("registrationDraft");
+
+    if (savedDraft) {
+      try {
+        const draft = JSON.parse(savedDraft);
+
+        if (draft.personalInformation) {
+          setPersonalInformation((current) => ({
+            ...current,
+            ...draft.personalInformation,
+            ssn: "",
+            policyNumber: "",
+          }));
+        }
+
+        if (draft.contactInformation) {
+          setContactInformation((current) => ({
+            ...current,
+            ...draft.contactInformation,
+          }));
+        }
+
+        if (typeof draft.completedStep === "number") {
+          setCompletedStep(
+            Math.min(4, Math.max(0, draft.completedStep))
+          );
+        }
+      } catch {
+        sessionStorage.removeItem("registrationDraft");
+      }
+    }
+
+    setDraftLoaded(true);
+  }, []);
+
+  
+ 
+  useEffect(() => {
+    if (!draftLoaded || !draftEnabled) return;
+
+    const draft = {
+      personalInformation: {
+        firstName: personalInformation.firstName,
+        lastName: personalInformation.lastName,
+        dateOfBirth: personalInformation.dateOfBirth,
+        zipCode: personalInformation.zipCode,
+      },
+      contactInformation,
+      completedStep,
+    };
+
+    sessionStorage.setItem(
+      "registrationDraft",
+      JSON.stringify(draft)
+    );
+  }, [
+    personalInformation,
+    contactInformation,
+    completedStep,
+    draftLoaded,
+    draftEnabled,
+  ]);
+
+
+
 
   return (
     <RegistrationContext.Provider
@@ -114,6 +224,9 @@ export function RegistrationProvider({
         setContactInformation,
         completedStep,
         setCompletedStep,
+        draftEnabled,
+        setDraftEnabled,
+        resetRegistration,
       }}
     >
       {children}

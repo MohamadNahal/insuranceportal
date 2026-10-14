@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegistration } from "@/context/RegistrationContext";
 import { registerUser } from "@/services/authService";
+import TextField from "@/components/TextField";
 
 type FormErrors = {
   email: string;
@@ -26,6 +27,10 @@ export default function ContactInformationForm() {
     contactInformation,
     setContactInformation,
     setCompletedStep,
+    setPersonalInformation,
+    setAccountInformation,
+    setSecurityInformation,
+    setDraftEnabled,
   } = useRegistration();
 
   const [errors, setErrors] = useState<FormErrors>({
@@ -42,6 +47,7 @@ export default function ContactInformationForm() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -52,7 +58,7 @@ export default function ContactInformationForm() {
       name === "state" ||
       name === "country"
     ) {
-      if (!/^[A-Za-z\s]*$/.test(value)) {
+      if (!/^[A-Za-z\s.'-]*$/.test(value)) {
         return;
       }
     }
@@ -68,13 +74,14 @@ export default function ContactInformationForm() {
       [name]: value,
     });
 
-    setErrors({
-      ...errors,
+    setErrors((previousErrors) => ({
+      ...previousErrors,
       [name]: "",
-    });
+    }));
 
     setMessage("");
   };
+
 
   const validateForm = () => {
     const newErrors: FormErrors = {
@@ -157,12 +164,76 @@ export default function ContactInformationForm() {
         contactInformation,
       });
 
+      
       if (response.ok) {
-        setCompletedStep(4);
-        router.push("/register/success");
-      } else {
-        setMessage(data.message || "Registration failed.");
+      setDraftEnabled(false);
+      sessionStorage.removeItem("registrationDraft");
+      setCompletedStep(4);
+      setPersonalInformation({
+        ssn: "",
+        policyNumber: "",
+        firstName: "",
+        lastName: "",
+        dateOfBirth: "",
+        zipCode: "",
+      });
+      setAccountInformation({
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setSecurityInformation({
+        nickname: "",
+        childhoodHero: "",
+      });
+      setContactInformation({
+        email: "",
+        phone: "",
+        streetAddress: "",
+        streetAddressLine2: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "USA",
+      });
+      router.push("/register/success");
+    } else {
+        const fieldErrors = data.errors;
+
+        if (fieldErrors && typeof fieldErrors === "object") {
+          const newErrors: FormErrors = {
+            email: "",
+            phone: "",
+            streetAddress: "",
+            streetAddressLine2: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            country: "",
+          };
+
+          for (const [field, messages] of Object.entries(fieldErrors)) {
+            const fieldName = field.split(".").pop()?.toLowerCase();
+            const errorMessage = Array.isArray(messages)
+              ? messages.join(" ")
+              : String(messages);
+
+            if (fieldName && fieldName in newErrors) {
+              newErrors[fieldName as keyof FormErrors] = errorMessage;
+            }
+          }
+
+          setErrors(newErrors);
+        }
+
+        setMessage(
+          data.detail ||
+            data.title ||
+            data.message ||
+            "Registration failed. Please check your information and try again."
+        );
       }
+
     } catch {
       setMessage("Unable to connect to the backend.");
     } finally {
@@ -189,52 +260,26 @@ export default function ContactInformationForm() {
         </div>
 
         <form onSubmit={handleContinue} className="space-y-5">
-          <div>
-            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-800">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={contactInformation.email}
-              onChange={handleChange}
-              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
-                errors.email
-                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-              }`}
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.email} ❗
-              </p>
-            )}
-          </div>
+          
+          <TextField
+            id="email"
+            label="Email"
+            type="email"
+            value={contactInformation.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
 
-          <div>
-            <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-gray-800">
-              Phone
-            </label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={contactInformation.phone}
-              onChange={handleChange}
-              maxLength={10}
-              className={`w-full rounded-md border bg-white px-3 py-2 text-gray-800 outline-none focus:ring-2 ${
-                errors.phone
-                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-              }`}
-            />
-            {errors.phone && (
-              <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.phone} ❗
-              </p>
-            )}
-          </div>
+
+          <TextField
+            id="phone"
+            label="Phone"
+            type="tel"
+            value={contactInformation.phone}
+            onChange={handleChange}
+            error={errors.phone}
+            maxLength={10}
+          />
 
           <div>
             <label htmlFor="streetAddress" className="mb-2 block text-sm font-semibold text-gray-800">
@@ -369,13 +414,26 @@ export default function ContactInformationForm() {
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-md bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
+          
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => router.push("/register/security")}
+              disabled={loading}
+              className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Back
+            </button>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-md bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </div>
+
 
           {message && (
             <p className="text-center text-sm font-medium text-red-600">

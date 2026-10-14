@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser, logoutUser } from "@/services/authService";
+import { useRegistration } from "@/context/RegistrationContext";
 
 export default function WelcomePage() {
   const router = useRouter();
+  const { resetRegistration } = useRegistration();
   const [authorized, setAuthorized] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -13,7 +15,6 @@ export default function WelcomePage() {
 
   useEffect(() => {
     let cancelled = false;
-
     async function checkSession() {
       try {
         const { response, data } = await getCurrentUser();
@@ -47,15 +48,18 @@ export default function WelcomePage() {
     };
   }, [router]);
 
+  
   const handleLogout = async () => {
     setLoggingOut(true);
 
     try {
       await logoutUser();
     } finally {
+      resetRegistration();
       router.replace("/");
     }
   };
+
 
   if (checkingSession || !authorized) {
     return null;
