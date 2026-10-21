@@ -19,21 +19,14 @@ public class RegistrationServiceTests
     [SetUp]
     public void SetUp()
     {
-        policyholderRepository =
-            new Mock<IPolicyholderRepository>();
+        policyholderRepository = new Mock<IPolicyholderRepository>();
 
-        accountRepository =
-            new Mock<IAccountRepository>();
+        accountRepository = new Mock<IAccountRepository>();
 
-        registrationRepository =
-            new Mock<IRegistrationRepository>();
+        registrationRepository = new Mock<IRegistrationRepository>();
 
-        service = new RegistrationService(
-            policyholderRepository.Object,
-            accountRepository.Object,
-            registrationRepository.Object);
-        authService = new AuthService(
-            accountRepository.Object);
+        service = new RegistrationService(policyholderRepository.Object,accountRepository.Object,registrationRepository.Object);
+        authService = new AuthService(accountRepository.Object);
     }
 
     [Test]
@@ -50,9 +43,7 @@ public class RegistrationServiceTests
             ZipCode = "12345"
         };
 
-        policyholderRepository
-            .Setup(repository =>
-                repository.FindPolicyholderAsync(
+        policyholderRepository.Setup(repository =>repository.FindPolicyholderAsync(
                     "1234",
                     "AB1234567",
                     "John",
@@ -71,12 +62,9 @@ public class RegistrationServiceTests
             ZipCode = "12345"
         };
 
-        var result =
-            await service.ValidatePolicyholderAsync(request);
+        var result =await service.ValidatePolicyholderAsync(request);
 
-        Assert.That(
-    result,
-    Is.EqualTo(PolicyholderValidationResult.Validated));
+        Assert.That(result,Is.EqualTo(PolicyholderValidationResult.Validated));
     }
     [Test]
     public async Task ValidatePolicyholderAsync_WhenPolicyholderAlreadyRegistered_ReturnsAlreadyRegistered()

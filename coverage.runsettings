@@ -1,0 +1,12 @@
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>       
+<ExcludeByFile>**/Migrations/**/*.cs,**/*Generated*.cs,**/*generated*.cs,**/System.Runtime.CompilerServices/**/*.cs,**/Exceptions/CouldNotAddAccountException.cs,**/Exceptions/CouldNotAddContactException.cs,**/Exceptions/CouldNotAddSecurityInformationException.cs,**/Exceptions/CouldNotFindAccountException.cs,**/Exceptions/CouldNotFindPolicyholderException.cs</ExcludeByFile>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

@@ -165,7 +165,7 @@ export default function AccountInformationForm() {
 
             {errors.username && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.username} ❗
+                {errors.username} 
               </p>
             )}
           </div>
@@ -193,7 +193,7 @@ export default function AccountInformationForm() {
 
             {errors.password && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.password} ❗
+                {errors.password}
               </p>
             )}
           </div>
@@ -222,7 +222,7 @@ export default function AccountInformationForm() {
 
             {errors.confirmPassword && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.confirmPassword} ❗
+                {errors.confirmPassword} 
               </p>
             )}
           </div>

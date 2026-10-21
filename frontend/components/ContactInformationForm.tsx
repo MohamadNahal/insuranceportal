@@ -298,7 +298,7 @@ export default function ContactInformationForm() {
             />
             {errors.streetAddress && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.streetAddress} ❗
+                {errors.streetAddress}
               </p>
             )}
           </div>
@@ -320,7 +320,7 @@ export default function ContactInformationForm() {
             />
             {errors.streetAddressLine2 && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.streetAddressLine2} ❗
+                {errors.streetAddressLine2}
               </p>
             )}
           </div>
@@ -342,7 +342,7 @@ export default function ContactInformationForm() {
             />
             {errors.city && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.city} ❗
+                {errors.city}
               </p>
             )}
           </div>
@@ -364,7 +364,7 @@ export default function ContactInformationForm() {
             />
             {errors.state && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.state} ❗
+                {errors.state}
               </p>
             )}
           </div>
@@ -387,7 +387,7 @@ export default function ContactInformationForm() {
             />
             {errors.zipCode && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.zipCode} ❗
+                {errors.zipCode}
               </p>
             )}
           </div>
@@ -409,7 +409,7 @@ export default function ContactInformationForm() {
             />
             {errors.country && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.country} ❗
+                {errors.country}
               </p>
             )}
           </div>

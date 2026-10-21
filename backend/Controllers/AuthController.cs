@@ -33,9 +33,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ValidatePolicyholder(
         PolicyholderValidationRequest request)
     {
-        var result =
-            await registrationService.ValidatePolicyholderAsync(request);
-
+        var result =await registrationService.ValidatePolicyholderAsync(request);
         switch (result)
         {
             case PolicyholderValidationResult.Validated:
@@ -55,7 +53,6 @@ public class AuthController : ControllerBase
                     StatusCodes.Status409Conflict,
                     "Registration conflict.",
                     "User already exists. Please continue with login.");
-
             default:
                 return CreateProblem(
                     StatusCodes.Status500InternalServerError,

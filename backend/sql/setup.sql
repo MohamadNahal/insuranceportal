@@ -896,3 +896,210 @@ SELECT
 FROM Policyholders
 ORDER BY FirstName;
 GO
+
+
+
+
+USE InsurancePortal;
+GO
+
+SELECT DB_NAME() AS CurrentDatabase;
+GO
+
+SELECT 'Policyholders' AS TableName, COUNT(*) AS TotalRows
+FROM dbo.Policyholders
+
+UNION ALL
+
+SELECT 'Accounts', COUNT(*)
+FROM dbo.Accounts
+
+UNION ALL
+
+SELECT 'Contacts', COUNT(*)
+FROM dbo.Contacts
+
+UNION ALL
+
+SELECT 'SecurityInformation', COUNT(*)
+FROM dbo.SecurityInformation;
+GO
+
+SELECT
+    Id,
+    FirstName,
+    LastName,
+    PolicyNumber,
+    DateOfBirth
+FROM dbo.Policyholders
+ORDER BY LastName, FirstName;
+GO
+
+
+USE InsurancePortal;
+GO
+
+SELECT
+    a.Username,
+    p.FirstName,
+    p.LastName
+FROM dbo.Accounts AS a
+INNER JOIN dbo.Policyholders AS p
+    ON p.Id = a.PolicyholderId;
+GO
+
+
+
+USE InsurancePortal;
+GO
+
+SELECT
+    p.FirstName,
+    p.LastName,
+    p.SSN,
+    p.PolicyNumber,
+    p.DateOfBirth,
+    p.ZipCode,
+    CASE
+        WHEN a.Id IS NULL THEN 'Not Registered'
+        ELSE 'Already Registered'
+    END AS RegistrationStatus
+FROM dbo.Policyholders AS p
+LEFT JOIN dbo.Accounts AS a
+    ON a.PolicyholderId = p.Id
+ORDER BY p.FirstName;
+GO
+
+
+
+USE InsurancePortal;
+GO
+
+SELECT
+    p.FirstName,
+    p.LastName,
+    a.Username,
+    CASE WHEN c.PolicyholderId IS NOT NULL
+        THEN 'Saved' ELSE 'Missing' END AS ContactStatus,
+    CASE WHEN s.PolicyholderId IS NOT NULL
+        THEN 'Saved' ELSE 'Missing' END AS SecurityStatus
+FROM dbo.Policyholders AS p
+INNER JOIN dbo.Accounts AS a
+    ON a.PolicyholderId = p.Id
+LEFT JOIN dbo.Contacts AS c
+    ON c.PolicyholderId = p.Id
+LEFT JOIN dbo.SecurityInformation AS s
+    ON s.PolicyholderId = p.Id;
+GO
+
+SELECT PolicyholderId, COUNT(*) AS RecordCount
+FROM Contacts
+GROUP BY PolicyholderId
+HAVING COUNT(*) > 1;
+
+
+SELECT PolicyholderId, COUNT(*) AS RecordCount
+FROM SecurityInformation
+GROUP BY PolicyholderId
+HAVING COUNT(*) > 1;
+
+SELECT PolicyholderId, COUNT(*) AS RecordCount
+FROM Contacts
+GROUP BY PolicyholderId
+HAVING COUNT(*) > 1;
+
+SELECT PolicyholderId, COUNT(*) AS RecordCount
+FROM SecurityInformation
+GROUP BY PolicyholderId
+HAVING COUNT(*) > 1;
+
+SELECT MigrationId
+FROM __EFMigrationsHistory
+ORDER BY MigrationId;
+
+SELECT
+    t.name AS TableName,
+    i.name AS IndexName,
+    i.is_unique AS IsUnique
+FROM sys.indexes i
+JOIN sys.tables t ON i.object_id = t.object_id
+WHERE t.name IN ('Contacts', 'SecurityInformation')
+  AND i.name IN (
+      'IX_Contacts_PolicyholderId',
+      'IX_SecurityInformation_PolicyholderId'
+  )
+ORDER BY t.name;
+
+SELECT Username
+FROM Accounts
+ORDER BY Username;
+
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    DATA_TYPE,
+    IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME LIKE '%Policyholder%'
+ORDER BY TABLE_NAME, ORDINAL_POSITION;
+
+
+SELECT
+    Id,
+    SSN,
+    PolicyNumber,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    ZipCode
+FROM Policyholders
+ORDER BY LastName, FirstName;
+
+SELECT
+    Username,
+    PolicyholderId
+FROM Accounts
+ORDER BY Username;
+
+
+
+SELECT
+    p.FirstName,
+    p.LastName,
+    p.PolicyNumber,
+    CASE
+        WHEN a.PolicyholderId IS NULL THEN 'Not Registered'
+        ELSE 'Already Registered'
+    END AS RegistrationStatus,
+    a.Username
+FROM Policyholders p
+LEFT JOIN Accounts a
+    ON a.PolicyholderId = p.Id
+ORDER BY p.LastName, p.FirstName;
+
+
+
+SELECT
+    p.FirstName,
+    p.LastName,
+    p.PolicyNumber,
+    p.DateOfBirth,
+    p.ZipCode
+FROM Policyholders p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Accounts a
+    WHERE a.PolicyholderId = p.Id
+)
+ORDER BY p.LastName, p.FirstName;
+
+
+SELECT
+    FirstName,
+    LastName,
+    SSN,
+    PolicyNumber
+FROM Policyholders
+WHERE FirstName IN ('Kenny', 'Rahul', 'Cyril', 'Isaac')
+ORDER BY FirstName;

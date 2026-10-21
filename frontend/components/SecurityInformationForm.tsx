@@ -138,7 +138,7 @@ export default function SecurityInformationForm() {
 
             {errors.nickname && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.nickname} ❗
+                {errors.nickname}
               </p>
             )}
           </div>
@@ -165,7 +165,7 @@ export default function SecurityInformationForm() {
 
             {errors.childhoodHero && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.childhoodHero} ❗
+                {errors.childhoodHero}
               </p>
             )}
           </div>

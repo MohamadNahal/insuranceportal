@@ -34,8 +34,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "YOUR_TEST_USERNAME",
-  "password": "YOUR_TEST_PASSWORD"
+  "username": "Alex123",
+  "password": "Alex@123"
 }
 
 ###

@@ -147,7 +147,7 @@ export default function LoginForm() {
 
             {errors.username && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.username} ❗
+                {errors.username}
               </p>
             )}
           </div>
@@ -175,7 +175,7 @@ export default function LoginForm() {
 
             {errors.password && (
               <p className="mt-1 text-sm font-medium text-red-500">
-                {errors.password} ❗
+                {errors.password}
               </p>
             )}
           </div>
