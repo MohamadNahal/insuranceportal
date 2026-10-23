@@ -20,7 +20,7 @@ public class DTOValidationTests
 
         var results = Validate(request);
 
-        Assert.That(results, Is.Not.Empty);
+        AssertHasErrorFor(results, nameof(request.SSN));
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class DTOValidationTests
 
         var results = Validate(request);
 
-        Assert.That(results, Is.Not.Empty);
+        AssertHasErrorFor(results, nameof(request.PolicyNumber));
     }
 
     [Test]
@@ -182,14 +182,20 @@ public class DTOValidationTests
             model,
             context,
             results,
-            true);
-
-        if (model is IValidatableObject validatable)
-        {
-            results.AddRange(
-                validatable.Validate(context));
-        }
+            validateAllProperties: true);
 
         return results;
     }
+    private static void AssertHasErrorFor(
+        IEnumerable<ValidationResult> results,
+        string propertyName)
+    {
+        Assert.That(
+            results.Any(result =>
+                result.MemberNames.Contains(propertyName)),
+            Is.True,
+            $"Expected a validation error for {propertyName}.");
+    }
+
+    
 }

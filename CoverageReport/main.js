@@ -290,8 +290,8 @@ var assemblies = [
   {
     "name": "InsurancePortalRegistration",
     "classes": [
-      { "name": "InsurancePortalRegistration.Controllers.AuthController", "rp": "InsurancePortalRegistration_AuthController.html", "cl": 41, "ucl": 62, "cal": 103, "tl": 177, "cb": 3, "tb": 15, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Data.InsurancePortalDbContext", "rp": "InsurancePortalRegistration_InsurancePortalDbContext.html", "cl": 7, "ucl": 49, "cal": 56, "tl": 79, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Controllers.AuthController", "rp": "InsurancePortalRegistration_AuthController.html", "cl": 95, "ucl": 8, "cal": 103, "tl": 177, "cb": 11, "tb": 15, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Data.InsurancePortalDbContext", "rp": "InsurancePortalRegistration_InsurancePortalDbContext.html", "cl": 56, "ucl": 0, "cal": 56, "tl": 79, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.DTOs.AccountInformationRequest", "rp": "InsurancePortalRegistration_AccountInformationRequest.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 84, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.DTOs.ContactInformationRequest", "rp": "InsurancePortalRegistration_ContactInformationRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 84, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.DTOs.LoginRequest", "rp": "InsurancePortalRegistration_LoginRequest.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -303,13 +303,13 @@ var assemblies = [
       { "name": "InsurancePortalRegistration.Entities.ContactInformation", "rp": "InsurancePortalRegistration_ContactInformation.html", "cl": 10, "ucl": 1, "cal": 11, "tl": 35, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.Entities.Policyholder", "rp": "InsurancePortalRegistration_Policyholder.html", "cl": 9, "ucl": 3, "cal": 12, "tl": 39, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.Entities.SecurityInformation", "rp": "InsurancePortalRegistration_SecurityInformation.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.ExceptionHandling.GlobalExceptionHandler", "rp": "InsurancePortalRegistration_GlobalExceptionHandler.html", "cl": 4, "ucl": 26, "cal": 30, "tl": 52, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Exceptions.DuplicateRegistrationException", "rp": "InsurancePortalRegistration_DuplicateRegistrationException.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Repositories.SqlAccountRepository", "rp": "InsurancePortalRegistration_SqlAccountRepository.html", "cl": 5, "ucl": 49, "cal": 54, "tl": 90, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Repositories.SqlContactRepository", "rp": "InsurancePortalRegistration_SqlContactRepository.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Repositories.SqlPolicyholderRepository", "rp": "InsurancePortalRegistration_SqlPolicyholderRepository.html", "cl": 7, "ucl": 31, "cal": 38, "tl": 69, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.ExceptionHandling.GlobalExceptionHandler", "rp": "InsurancePortalRegistration_GlobalExceptionHandler.html", "cl": 31, "ucl": 0, "cal": 31, "tl": 54, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Exceptions.DuplicateRegistrationException", "rp": "InsurancePortalRegistration_DuplicateRegistrationException.html", "cl": 3, "ucl": 3, "cal": 6, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Repositories.SqlAccountRepository", "rp": "InsurancePortalRegistration_SqlAccountRepository.html", "cl": 36, "ucl": 18, "cal": 54, "tl": 90, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Repositories.SqlContactRepository", "rp": "InsurancePortalRegistration_SqlContactRepository.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Repositories.SqlPolicyholderRepository", "rp": "InsurancePortalRegistration_SqlPolicyholderRepository.html", "cl": 38, "ucl": 0, "cal": 38, "tl": 69, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.Repositories.SqlRegistrationRepository", "rp": "InsurancePortalRegistration_SqlRegistrationRepository.html", "cl": 7, "ucl": 27, "cal": 34, "tl": 61, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "InsurancePortalRegistration.Repositories.SqlSecurityInformationRepository", "rp": "InsurancePortalRegistration_SqlSecurityInformationRepository.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "InsurancePortalRegistration.Repositories.SqlSecurityInformationRepository", "rp": "InsurancePortalRegistration_SqlSecurityInformationRepository.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.Services.AuthService", "rp": "InsurancePortalRegistration_AuthService.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 41, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "InsurancePortalRegistration.Services.RegistrationService", "rp": "InsurancePortalRegistration_RegistrationService.html", "cl": 82, "ucl": 0, "cal": 82, "tl": 118, "cb": 10, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Program", "rp": "InsurancePortalRegistration_Program.html", "cl": 110, "ucl": 11, "cal": 121, "tl": 148, "cb": 5, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -331,12 +331,6 @@ var riskHotspots = [
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "InsurancePortalRegistration", "class": "InsurancePortalRegistration.ExceptionHandling.GlobalExceptionHandler", "reportPath": "InsurancePortalRegistration_GlobalExceptionHandler.html", "methodName": "TryHandleAsync()", "methodShortName": "TryHandleAsync()", "fileIndex": 0, "line": 21,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
     ]},
 ];
 

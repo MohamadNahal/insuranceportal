@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InsurancePortalRegistration.ExceptionHandling;
+using System.Text.Json;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
@@ -43,9 +44,10 @@ public class GlobalExceptionHandler : IExceptionHandler
         httpContext.Response.StatusCode = statusCode;
         httpContext.Response.ContentType = "application/problem+json";
 
-        await httpContext.Response.WriteAsJsonAsync(
-            problemDetails,
-            cancellationToken);
+    await JsonSerializer.SerializeAsync(
+        httpContext.Response.Body,
+        problemDetails,
+        cancellationToken: cancellationToken);
 
         return true;
     }

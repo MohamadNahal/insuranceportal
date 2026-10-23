@@ -326,9 +326,11 @@ public class RegistrationServiceTests
                     It.IsAny<SecurityInformation>()),
             Times.Never);
     }
-
+    
+    
+    
     [Test]
-    public async Task RegisterAsync_WithValidInformation_SavesHashedPassword()
+    public async Task RegisterAsync_WithValidInformation_SavesAllRegistrationDataSecurely()
     {
         var policyholder = new Policyholder
         {
@@ -342,39 +344,34 @@ public class RegistrationServiceTests
         };
 
         policyholderRepository
-            .Setup(repository =>
-                repository.FindPolicyholderAsync(
-                    "1234",
-                    "AB1234567",
-                    "John",
-                    "Smith",
-                    "01/01/1990",
-                    "12345"))
+            .Setup(r => r.FindPolicyholderAsync(
+                "1234",
+                "AB1234567",
+                "John",
+                "Smith",
+                "01/01/1990",
+                "12345"))
             .ReturnsAsync(policyholder);
 
         accountRepository
-            .Setup(repository =>
-                repository.PolicyholderHasAccountAsync(
-                    policyholder.Id))
+            .Setup(r => r.PolicyholderHasAccountAsync(policyholder.Id))
             .ReturnsAsync(false);
 
         accountRepository
-            .Setup(repository =>
-                repository.UsernameExistsAsync("johnsmith"))
+            .Setup(r => r.UsernameExistsAsync("johnsmith"))
             .ReturnsAsync(false);
 
-        Account? savedAccount = null;
+        SecurityInformation? savedSecurityInformation = null;
 
         registrationRepository
-            .Setup(repository =>
-                repository.AddRegistrationAsync(
-                    It.IsAny<Account>(),
-                    It.IsAny<ContactInformation>(),
-                    It.IsAny<SecurityInformation>()))
+            .Setup(r => r.AddRegistrationAsync(
+                It.IsAny<Account>(),
+                It.IsAny<ContactInformation>(),
+                It.IsAny<SecurityInformation>()))
             .Callback<Account, ContactInformation, SecurityInformation>(
-                (account, contact, securityInformation) =>
+                (account, contact, security) =>
                 {
-                    savedAccount = account;
+                    savedSecurityInformation = security;
                 })
             .Returns(Task.CompletedTask);
 
@@ -389,20 +386,17 @@ public class RegistrationServiceTests
                 DateOfBirth = "01/01/1990",
                 ZipCode = "12345"
             },
-
             AccountInformation = new AccountInformationRequest
             {
                 Username = "johnsmith",
                 Password = "Password123!",
                 ConfirmPassword = "Password123!"
             },
-
             SecurityInformation = new SecurityInformationRequest
             {
                 Nickname = "Johnny",
                 ChildhoodHero = "Superman"
             },
-
             ContactInformation = new ContactInformationRequest
             {
                 Email = "john@example.com",
@@ -415,18 +409,43 @@ public class RegistrationServiceTests
                 Country = "USA"
             }
         };
+        var result = await service.RegisterAsync(request);
+        Assert.That(result, Is.EqualTo(RegistrationResult.Registered));
+        Assert.That(savedSecurityInformation, Is.Not.Null);
 
-        await service.RegisterAsync(request);
+        Assert.That(
+            savedSecurityInformation!.PolicyholderId,
+            Is.EqualTo(policyholder.Id));
 
-        Assert.That(savedAccount, Is.Not.Null);
+        Assert.That(
+            savedSecurityInformation.NicknameHash,
+            Is.Not.EqualTo(request.SecurityInformation.Nickname));
+
+        Assert.That(
+            savedSecurityInformation.ChildhoodHeroHash,
+            Is.Not.EqualTo(request.SecurityInformation.ChildhoodHero));
 
         Assert.That(
             BCrypt.Net.BCrypt.Verify(
-                "Password123!",
-                savedAccount!.PasswordHash),
-            Is.True);
-    }
+                request.SecurityInformation.Nickname,
+                savedSecurityInformation.NicknameHash),
+            Is.True,
+            "Nickname should be stored as a BCrypt hash.");
 
+        Assert.That(
+            BCrypt.Net.BCrypt.Verify(
+                request.SecurityInformation.ChildhoodHero,
+                savedSecurityInformation.ChildhoodHeroHash),
+            Is.True,
+            "Childhood hero should be stored as a BCrypt hash.");
+
+        registrationRepository.Verify(
+            r => r.AddRegistrationAsync(
+                It.IsAny<Account>(),
+                It.IsAny<ContactInformation>(),
+                It.IsAny<SecurityInformation>()),
+            Times.Once);
+    }
     [Test]
     public async Task LoginAsync_WithWrongPassword_ReturnsNull()
     {
